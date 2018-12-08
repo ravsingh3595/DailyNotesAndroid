@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddNote">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/txtNoteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Note Title" />
+
+        <EditText
+            android:id="@+id/txtNoteContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Note Content"
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/txtNoteTitle"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:background="@color/colorPrimary"
+            android:textColor="#fff"
+            android:text="Save"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:layout_margin="10dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true">
+
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="cameraButtonClick"
+                app:fab_label="Camera"
+                android:src="@drawable/ic_camera_alt_black_24dp"
+                app:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="galleryButtonClick"
+                app:fab_label="Gallery"
+                android:src="@drawable/ic_photo_black_24dp"
+                app:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="audioButtonClick"
+                app:fab_label="Audio"
+                android:src="@drawable/ic_audiotrack_black_24dp"
+                app:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="mapButtonClick"
+                app:fab_label="Map"
+                android:src="@drawable/ic_location_on_black_24dp"
+                app:fab_size="mini" />
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
