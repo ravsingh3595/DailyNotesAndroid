@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentToNote = new Intent(getApplicationContext(), NoteListActivity.class);
+                intentToNote.putExtra("SubjectName", subjects[i]);
                 startActivity(intentToNote);
             }
         });
