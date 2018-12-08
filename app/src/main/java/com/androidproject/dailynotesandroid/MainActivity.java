@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,12 +19,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidproject.dailynotesandroid.Database.DBSubject;
+import com.androidproject.dailynotesandroid.Model.Subject;
 import com.github.clans.fab.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton btn;
     ListView subjectListView;
+    EditText addSubject;
+    DBSubject dbSubject = new DBSubject(MainActivity.this);
 
     String[] subjects= {"Maths", "English", "Science"};
 
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentToNote = new Intent(getApplicationContext(), NoteListActivity.class);
+                intentToNote.putExtra("SubjectName", subjects[i]);
                 startActivity(intentToNote);
             }
         });
@@ -61,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
         alertDialogBuilder.setTitle("Add Subject");
-        alertDialogBuilder.setView(R.layout.add_subject);
+        final View dialogView = getLayoutInflater().inflate(R.layout.add_subject, null);
+        alertDialogBuilder.setView(dialogView);
+
+
+
         alertDialogBuilder.setCancelable(false);
 
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
@@ -78,7 +88,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                Toast.makeText(getApplicationContext(), "Save Clicked", Toast.LENGTH_SHORT).show();
+
+
+                addSubject = (EditText) dialogView.findViewById(R.id.addSubjectEditText);
+
+//                dbSubject.insertSubject(addSubject(addSubject.getText().toString()));
+                Toast.makeText(getApplicationContext(), "Save Clicked " + addSubject.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -88,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
         mAlertDialog.show();
     }
 
+    public Subject addSubject(String subjectName){
+        Subject subject = new Subject();
+        subject.setSubjectName(subjectName);
+        return subject;
+    }
 
     class CustomAdapter extends BaseAdapter{
 

@@ -6,7 +6,7 @@
 
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/addSubjectEditText"
         android:hint="Enter Subject Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
