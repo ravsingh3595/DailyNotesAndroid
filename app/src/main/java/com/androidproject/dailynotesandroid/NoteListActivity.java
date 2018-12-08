@@ -51,9 +51,9 @@ public class NoteListActivity extends AppCompatActivity {
         noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
+                Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
 //                intentToNote.putExtra("NoteData", );
-//                startActivity(intentToNote);
+                startActivity(intentToNote);
                 Toast.makeText(getApplicationContext(), "Pressed" + notesDate[i], Toast.LENGTH_SHORT).show();
             }
         });
@@ -71,8 +71,8 @@ public class NoteListActivity extends AppCompatActivity {
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
-//                startActivity(intentToNote);
+                Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
+                startActivity(intentToNote);
             }
         });
 
