@@ -30,14 +30,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "onCreate Success for SubjectTable");
 
-        String noteTable = "CREATE TABLE " + DBNote.TABLE_NOTE + "(" +
-                DBNote.NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+        String noteTable = "CREATE TABLE " + DBNote.TABLE_NOTE + "("
+                + DBNote.NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + DBNote.NOTE_TITLE + " TEXT default null,"
                 + DBNote.NOTE_CONTENT + " TEXT default null,"
                 + DBNote.AUDIO + " TEXT default null,"
                 + DBNote.DATETIME + " DATE default null,"
-                + DBNote.LATITUDE + " DOUBLE default null,"
-                + DBNote.LONGITUDE + " DOUBLE default null,"
+                + DBNote.LATITUDE + " FLOAT default null,"
+                + DBNote.LONGITUDE + " FLOAT default null,"
                 + DBNote.IMAGE_ID + " INTEGER default null)";
 
         sqLiteDatabase.execSQL(noteTable);
@@ -52,7 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // Drop older table if existed
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBSubject.TABLE_SUBJECT);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBNote.TABLE_NOTE);
-        
+
         // Create tables again
         onCreate(sqLiteDatabase);
     }
