@@ -56,8 +56,6 @@ public class StoreAudioActivity extends AppCompatActivity {
 //                    Toast.makeText(this, Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +
 //                            CreateRandomAudioFileName(5) + "AudioRecording.3gp", To)
 
-
-
                         MediaRecorderReady();
 
                         try {
@@ -72,7 +70,8 @@ public class StoreAudioActivity extends AppCompatActivity {
                         }
 
                         btnRecod.setEnabled(true);
-                        btnStop.setEnabled(false);
+                        btnStop.setEnabled(true);
+
 
                         Toast.makeText(StoreAudioActivity.this, "Recording started",
                                 Toast.LENGTH_LONG).show();
@@ -102,9 +101,9 @@ public class StoreAudioActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 {
-                    btnStop.setEnabled(false);
+                    btnStop.setEnabled(true);
                     btnRecod.setEnabled(false);
-                    btnPlay.setEnabled(true);
+                    btnPlay.setEnabled(false);
 
                     mediaPlayer = new MediaPlayer();
                     try {
@@ -212,7 +211,6 @@ public class StoreAudioActivity extends AppCompatActivity {
         while(i < string ) {
             stringBuilder.append(RandomAudioFileName.
                     charAt(random.nextInt(RandomAudioFileName.length())));
-
             i++ ;
         }
         return stringBuilder.toString();
