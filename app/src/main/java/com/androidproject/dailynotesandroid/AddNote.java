@@ -13,8 +13,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.PermissionRequest;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.androidproject.dailynotesandroid.Database.DBImage;
+import com.androidproject.dailynotesandroid.Database.DBNote;
+import com.androidproject.dailynotesandroid.Model.Image;
+import com.androidproject.dailynotesandroid.Model.Note;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -34,12 +40,70 @@ public class AddNote extends AppCompatActivity {
     private static final String IMAGE_DIRECTORY = "/dailynote";
     private int GALLERY = 1, CAMERA = 2;
 
+    Button saveNote;
+    EditText txtNoteTitle;
+    EditText txtNoteContent;
+
+    boolean isEdit = false;
+    DBImage dbImage = new DBImage(AddNote.this);
+    DBNote dbNote = new DBNote(AddNote.this);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+        saveNote = (Button) findViewById(R.id.saveNote);
+        txtNoteTitle = (EditText) findViewById(R.id.txtNoteTitle);
+        txtNoteContent = (EditText) findViewById(R.id.txtNoteContent);
 
         requestMultiplePermissions();
+
+        Bundle noteData = getIntent().getExtras();
+        if (noteData != null){
+            isEdit = true;
+
+        }
+
+        saveNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isEdit){
+
+
+                    //UPDATE Database
+
+//                    dbNote.updateNote(note);
+//                    dbImage.updateImage(image);
+                }
+                else{
+                    //SAVE Database
+
+//                    dbNote.insertNote(populateDataNote());
+//                    dbImage.insertImage(populateDataImage());
+                }
+
+
+            }
+        });
+    }
+
+    public Note populateDataNote(){
+        Note note = new Note();
+        note.setNoteTitle(txtNoteTitle.getText().toString());
+        note.setNoteContent(txtNoteContent.getText().toString());
+//        note.setAudio();
+//        note.setDateTime();
+//        note.setLatitude();
+//        note.setLongitude();
+//        note.setImageId();
+        return note;
+    }
+
+    public Image populateDataImage(){
+        Image image = new Image();
+//        image.setImageLocation();
+        return image;
     }
 
     public void galleryButtonClick(View view) {

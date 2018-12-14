@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class DBNote {
 
-
     public static final String TABLE_NOTE = "tblNote";
+    public static final String SUBJECT_NAME = "subjectName";
     public static final String NOTE_ID = "noteId";
     public static final String NOTE_TITLE = "noteTitle";
     public static final String NOTE_CONTENT = "noteContent";
@@ -39,7 +39,7 @@ public class DBNote {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(NOTE_ID, note.getNoteId());
+        contentValues.put(SUBJECT_NAME, note.getSubjectName());
         contentValues.put(NOTE_TITLE, note.getNoteTitle());
         contentValues.put(NOTE_CONTENT, note.getNoteContent());
         contentValues.put(AUDIO, note.getAudio());
@@ -93,16 +93,18 @@ public class DBNote {
         {
             if(cursor.getCount() > 0)
             {
-                Note note = new Note();
+
                 while (cursor.moveToNext())
                 {
-                    note.setNoteTitle(cursor.getString(1));
-                    note.setNoteContent(cursor.getString(2));
-                    note.setAudio(cursor.getString(3));
-//                    note.setDateTime(cursor.getString(4));
-                    note.setLatitude(cursor.getFloat(5));
-                    note.setLongitude(cursor.getFloat(6));
-                    note.setImageId(cursor.getInt(7));
+                    Note note = new Note();
+                    note.setSubjectName(cursor.getString(1));
+                    note.setNoteTitle(cursor.getString(2));
+                    note.setNoteContent(cursor.getString(3));
+                    note.setAudio(cursor.getString(4));
+//                    note.setDateTime(cursor.getString(5));
+                    note.setLatitude(cursor.getFloat(6));
+                    note.setLongitude(cursor.getFloat(7));
+                    note.setImageId(cursor.getInt(8));
 
                     Log.d("AllNoteData", note.getNoteTitle());
                     noteArrayList.add(note);
@@ -113,34 +115,32 @@ public class DBNote {
         return noteArrayList;
     }
 
-    public Note getNote (Context context){
+    public Note getNote (Context context, Note note1){
 
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase database = dbHelper.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLE_NOTE;                          //ADD Where clause
         Cursor cursor = database.rawQuery(selectQuery, null);
-        Note note = new Note();
+
         if(cursor !=null)
         {
             if(cursor.getCount() > 0)
             {
+                Note note = new Note();
+                note.setSubjectName(cursor.getString(1));
+                note.setNoteTitle(cursor.getString(2));
+                note.setNoteContent(cursor.getString(3));
+                note.setAudio(cursor.getString(4));
+//              note.setDateTime(cursor.getString(5));
+                note.setLatitude(cursor.getFloat(6));
+                note.setLongitude(cursor.getFloat(7));
+                note.setImageId(cursor.getInt(8));
 
-                while (cursor.moveToNext())
-                {
-                    note.setNoteTitle(cursor.getString(1));
-                    note.setNoteContent(cursor.getString(2));
-                    note.setAudio(cursor.getString(3));
-//                    note.setDateTime(cursor.getString(4));
-                    note.setLatitude(cursor.getFloat(5));
-                    note.setLongitude(cursor.getFloat(6));
-                    note.setImageId(cursor.getInt(7));
-
-                    Log.d("NoteData", note.getNoteTitle());
-                }
+                Log.d("NoteData", note.getNoteTitle());
             }
         }
         database.close();
-        return note;
+        return note1;
     }
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Note implements Serializable {
 
+    private String subjectName;
     private int noteId;
     private String noteTitle;
     private String noteContent;
@@ -18,7 +19,8 @@ public class Note implements Serializable {
 
     }
 
-    public Note(int noteId, String noteTitle, String noteContent, String audio, Date dateTime, float latitude, float longitude, int imageId) {
+    public Note(String subjectName, int noteId, String noteTitle, String noteContent, String audio, Date dateTime, float latitude, float longitude, int imageId) {
+        this.subjectName = subjectName;
         this.noteId = noteId;
         this.noteTitle = noteTitle;
         this.noteContent = noteContent;
@@ -27,6 +29,14 @@ public class Note implements Serializable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.imageId = imageId;
+    }
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
     public int getNoteId() {

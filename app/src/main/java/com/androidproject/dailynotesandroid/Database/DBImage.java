@@ -5,70 +5,67 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.androidproject.dailynotesandroid.Model.Subject;
+import com.androidproject.dailynotesandroid.Model.Image;
 
 import java.util.ArrayList;
 
-public class DBSubject {
+public class DBImage {
 
-    public static final String TABLE_SUBJECT = "tblSubject";
-    public static final String SUBJECT_ID = "subjectId";
-    public static final String SUBJECT_NAME = "subjectName";
-
+    public static final String TABLE_IMAGE = "tblImage";
+    public static final String IMAGE_ID = "imageId";
+    public static final String IMAGE_LOCATION = "imageLocation";
 
     private Context context;
     private DBHelper dbHelper;
 
-    public DBSubject(Context context)
+    public DBImage(Context context)
     {
         this.context = context;
     }
 
-    public void insertSubject(Subject subject)
+    public void insertImage(Image image)
     {
         dbHelper = new DBHelper(context);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SUBJECT_NAME, subject.getSubjectName());
+        contentValues.put(IMAGE_LOCATION, image.getImageLocation());
 
-        database.insert(TABLE_SUBJECT, null, contentValues);
+        database.insert(TABLE_IMAGE, null, contentValues);
         database.close();
-
     }
 
-    public void updateSubject(Subject subject)
+    public void updateImage(Image image)
     {
         dbHelper = new DBHelper(context);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SUBJECT_NAME, subject.getSubjectName());
+        contentValues.put(IMAGE_LOCATION, image.getImageLocation());
 
-        database.update(TABLE_SUBJECT, contentValues, SUBJECT_NAME + "=?", new String[]{(subject.getSubjectName())});
+        database.update(TABLE_IMAGE, contentValues, IMAGE_ID + "=?", new String[]{(String.valueOf(image.getImageId()))});
         database.close();
 
     }
 
-    public void deleteSubject(Subject subject)
+    public void deleteImage(Image image)
     {
         dbHelper = new DBHelper(context);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-        database.delete(TABLE_SUBJECT, SUBJECT_NAME + "=?", new String[]{(subject.getSubjectName())});
+        database.delete(TABLE_IMAGE, IMAGE_ID + "=?", new String[]{(String.valueOf(image.getImageId()))});
         database.close();
     }
 
-    public ArrayList<Subject> getAllSubject (Context context){
+    public ArrayList<Image> getAllImages (Context context){
 
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase database = dbHelper.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + TABLE_SUBJECT;
+        String selectQuery = "SELECT * FROM " + TABLE_IMAGE;
         Cursor cursor =database.rawQuery(selectQuery, null);
 
-        ArrayList<Subject> subjectArrayList = new ArrayList<>();
+        ArrayList<Image> imageArrayList = new ArrayList<>();
         if(cursor !=null)
         {
             if(cursor.getCount() > 0)
@@ -77,16 +74,16 @@ public class DBSubject {
 
                 while (cursor.moveToNext())
                 {
-                    Subject subject1 = new Subject();
-                    subject1.setSubjectName(cursor.getString(1));
+                    Image image1 = new Image();
+                    image1.setImageLocation(cursor.getString(1));
 
-                    Log.d("SubjectData", subject1.getSubjectName());
-                    subjectArrayList.add(subject1);
+                    Log.d("ImageData", image1.getImageLocation());
+                    imageArrayList.add(image1);
                 }
             }
         }
         database.close();
-        return subjectArrayList;
+        return imageArrayList;
     }
 
 }
