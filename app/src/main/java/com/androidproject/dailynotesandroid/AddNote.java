@@ -3,6 +3,7 @@ package com.androidproject.dailynotesandroid;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -10,9 +11,15 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.PermissionRequest;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +27,12 @@ import android.widget.Toast;
 import com.androidproject.dailynotesandroid.Database.DBImage;
 import com.androidproject.dailynotesandroid.Database.DBNote;
 import com.androidproject.dailynotesandroid.Model.Image;
+
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.androidproject.dailynotesandroid.Model.Note;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -32,13 +45,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import android.view.LayoutInflater;
 
-public class AddNote extends AppCompatActivity {
+public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener{
 
     private static final String IMAGE_DIRECTORY = "/dailynote";
     private int GALLERY = 1, CAMERA = 2;
+
 
     Button saveNote;
     EditText txtNoteTitle;
@@ -49,6 +65,18 @@ public class AddNote extends AppCompatActivity {
     DBNote dbNote = new DBNote(AddNote.this);
 
 
+
+    private LinearLayout mGallery;
+    ArrayList<Bitmap> mImgIds = new ArrayList<Bitmap>();
+
+    private LayoutInflater mInflater;
+    private HorizontalScrollView horizontalScrollView;
+
+    private MyRecyclerViewAdapter adapter;
+    RecyclerView recyclerView;
+    Note note;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +85,10 @@ public class AddNote extends AppCompatActivity {
         txtNoteTitle = (EditText) findViewById(R.id.txtNoteTitle);
         txtNoteContent = (EditText) findViewById(R.id.txtNoteContent);
 
+        recyclerView = findViewById(R.id.rvAnimals);
+
         requestMultiplePermissions();
+
 
         Bundle noteData = getIntent().getExtras();
         if (noteData != null){
@@ -104,7 +135,67 @@ public class AddNote extends AppCompatActivity {
         Image image = new Image();
 //        image.setImageLocation();
         return image;
+
+        mInflater = LayoutInflater.from(this);
+
+        setupRecyclerView();
+
     }
+
+    private void setupRecyclerView() {
+
+        ArrayList<String> animalNames = new ArrayList<>();
+
+        // set up the RecyclerView
+        if (mImgIds.size() > 0){
+
+            for (int i = 0; i < mImgIds.size(); i++) {
+                animalNames.add("");
+                LinearLayoutManager horizontalLayoutManager
+                        = new LinearLayoutManager(AddNote.this, LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(horizontalLayoutManager);
+                adapter = new MyRecyclerViewAdapter(this, mImgIds, animalNames);
+                adapter.setClickListener(this);
+                recyclerView.setAdapter(adapter);
+            }
+        }
+
+    }
+
+
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    // handle action bar button activitiy
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_save) {
+            // do something here
+            if (mImgIds.size() > 0){
+                Toast.makeText(this, "Array size: " + mImgIds.size(), Toast.LENGTH_SHORT).show();
+                for (int i=0; i<mImgIds.size(); i++) {
+                    saveImage(mImgIds.get(i));
+                }
+            }
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void appendImgData(Bitmap img){
+        mImgIds.add(img);
+    }
+
+
+    /* Button clicks */
 
     public void galleryButtonClick(View view) {
         choosePhotoFromGallary();
@@ -117,7 +208,8 @@ public class AddNote extends AppCompatActivity {
     }
 
     public void mapButtonClick(View view) {
-
+        Intent intent = new Intent(AddNote.this, ShowUserLocationActivity.class);
+        startActivity(intent);
     }
 
     public void cameraButtonClick(View view) {
@@ -150,10 +242,11 @@ public class AddNote extends AppCompatActivity {
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    String path = saveImage(bitmap);
+//                    String path = saveImage(bitmap); //uncomment to save
                     Toast.makeText(AddNote.this, "Image Saved!", Toast.LENGTH_SHORT).show();
 //                    imageview.setImageBitmap(bitmap);
 
+                    appendImgData(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(AddNote.this, "Failed!", Toast.LENGTH_SHORT).show();
@@ -163,9 +256,13 @@ public class AddNote extends AppCompatActivity {
         } else if (requestCode == CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 //            imageview.setImageBitmap(thumbnail);
-            saveImage(thumbnail);
+
+            appendImgData(thumbnail);
+//            saveImage(thumbnail);
             Toast.makeText(AddNote.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
+//        initView();
+        setupRecyclerView();
     }
 
     public String saveImage(Bitmap myBitmap) {
@@ -230,6 +327,11 @@ public class AddNote extends AppCompatActivity {
             }
         }).onSameThread()
                 .check();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
     }
 
     /* Record Audio file */

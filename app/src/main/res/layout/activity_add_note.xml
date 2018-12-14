@@ -23,8 +23,10 @@
             android:layout_height="wrap_content"
             android:hint="Enter Note Content"
             android:inputType="textMultiLine"
+            android:layout_marginBottom="30dp"
             android:layout_below="@+id/txtNoteTitle"
             />
+
 
         <Button
             android:id="@+id/saveNote"
@@ -38,6 +40,33 @@
             android:paddingRight="50dp"
             android:text="Save"
             android:textColor="#fff" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvAnimals"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dp"
+
+            />
+
+        <!--<HorizontalScrollView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="150dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_below="@+id/txtNoteContent"-->
+            <!--android:scrollbars="none" >-->
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/id_gallery"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:orientation="horizontal" >-->
+            <!--</LinearLayout>-->
+        <!--</HorizontalScrollView>-->
+
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -79,6 +108,7 @@
                 app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/btnMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="mapButtonClick"

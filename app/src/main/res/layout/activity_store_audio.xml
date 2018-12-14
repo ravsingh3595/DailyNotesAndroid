@@ -15,7 +15,7 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="78dp"
         android:background="@drawable/ic_keyboard_voice_black_24dp"
-        android:onClick="btnRecordClick" />
+         />
 
 
     <Button
@@ -26,12 +26,14 @@
 
         android:layout_marginLeft="80dp"
         android:layout_marginTop="52dp"
-        android:background="@color/colorPrimary"
+
         android:text="Play"
         android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"
-        android:textColor="@android:color/background_light"
-       />
+        />
+    <!--android:background="@color/colorPrimary"-->
+        <!--android:textColor="@android:color/background_light"-->
+
 
     <Button
         android:id="@+id/btnStop"
@@ -44,9 +46,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="80dp"
-        android:background="@color/colorPrimary"
+
         android:text="Stop"
-        android:textColor="@android:color/background_light" />
+        >
+
+    </Button>
+
 
 
 
