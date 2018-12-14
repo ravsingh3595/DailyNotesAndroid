@@ -117,6 +117,10 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
             }
         });
+
+        mInflater = LayoutInflater.from(this);
+
+        setupRecyclerView();
     }
 
     public Note populateDataNote(){
@@ -136,11 +140,10 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 //        image.setImageLocation();
         return image;
 
-        mInflater = LayoutInflater.from(this);
 
-        setupRecyclerView();
 
     }
+
 
     private void setupRecyclerView() {
 
