@@ -46,7 +46,8 @@
 
         <activity
             android:name=".ShowUserLocationActivity"
-            android:label="@string/title_activity_show_user_location"></activity>
+            android:label="@string/title_activity_show_user_location" />
+        <activity android:name=".ShowFullImageActivity"></activity>
     </application>
 
 </manifest>
