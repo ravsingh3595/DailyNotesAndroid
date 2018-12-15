@@ -57,8 +57,6 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     private static final String IMAGE_DIRECTORY = "/dailynote";
     private int GALLERY = 1, CAMERA = 2;
 
-
-
     Button saveNote;
     EditText txtNoteTitle;
     EditText txtNoteContent;
@@ -66,9 +64,6 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     boolean isEdit = false;
     DBImage dbImage = new DBImage(AddNote.this);
     DBNote dbNote = new DBNote(AddNote.this);
-
-
-
 
     private LinearLayout mGallery;
     private LayoutInflater mInflater;
@@ -81,12 +76,15 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     DBNote dbSubject = new DBNote(AddNote.this);
 
+    Note myNoteObj = new Note();
+    ArrayList<String> myImagesUrl = new ArrayList<String>(); // use array to save in database
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
-        saveNote = (Button) findViewById(R.id.saveNote);
+//        saveNote = (Button) findViewById(R.id.saveNote);
         txtNoteTitle = (EditText) findViewById(R.id.txtNoteTitle);
         txtNoteContent = (EditText) findViewById(R.id.txtNoteContent);
 
@@ -101,34 +99,35 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
         requestMultiplePermissions();
 
-
         Bundle noteData = getIntent().getExtras();
         if (noteData != null){
             isEdit = true;
 
         }
 
-        saveNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isEdit){
 
-
-                    //UPDATE Database
-
-//                    dbNote.updateNote(note);
-//                    dbImage.updateImage(image);
-                }
-                else{
-                    //SAVE Database
-
-//                    dbNote.insertNote(populateDataNote());
-//                    dbImage.insertImage(populateDataImage());
-                }
-
-
-            }
-        });
+        /* save image */
+//        saveNote.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (isEdit){
+//
+//
+//                    //UPDATE Database
+//
+////                    dbNote.updateNote(note);
+////                    dbImage.updateImage(image);
+//                }
+//                else{
+//                    //SAVE Database
+//
+////                    dbNote.insertNote(populateDataNote());
+////                    dbImage.insertImage(populateDataImage());
+//                }
+//
+//
+//            }
+//        });
 
         mInflater = LayoutInflater.from(this);
 
@@ -190,13 +189,16 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        String imageURL = "";
 
-        if (id == R.id.menu_save) {
+        if (id == R.id.menu_save) {  // save button click
             // do something here
             if (mImgIds.size() > 0){
                 Toast.makeText(this, "Array size: " + mImgIds.size(), Toast.LENGTH_SHORT).show();
                 for (int i=0; i<mImgIds.size(); i++) {
-                    saveImage(mImgIds.get(i));
+                   imageURL = saveImage(mImgIds.get(i));
+                   myImagesUrl.add(imageURL);
+                    Toast.makeText(getApplicationContext(), myImagesUrl.get(i), Toast.LENGTH_LONG).show();
                 }
             }
         }
