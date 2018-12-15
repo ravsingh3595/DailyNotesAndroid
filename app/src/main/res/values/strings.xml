@@ -2,4 +2,6 @@
     <string name="app_name">DailyNotesAndroid</string>
     <string name="title_activity_add_note">AddNote</string>
     <string name="title_activity_show_user_location">Map</string>
+
+    <string name="google_map_api">AIzaSyBk9EFb6TdYvoPqyltt6GvaeSpWKmThhJM</string>
 </resources>
