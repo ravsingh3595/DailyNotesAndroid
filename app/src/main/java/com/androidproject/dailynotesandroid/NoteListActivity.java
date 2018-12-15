@@ -62,14 +62,14 @@ public class NoteListActivity extends AppCompatActivity {
         CustomAdapter adapter = new CustomAdapter();
         noteListView.setAdapter(adapter);
 
-        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
-        savedImageArrayList = dbImage.getAllImages(NoteListActivity.this);
+//        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
+//        savedImageArrayList = dbImage.getAllImages(NoteListActivity.this);
 
         noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentToEditNote = new Intent(getApplicationContext(), AddNote.class);
-                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
+//                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
 //                intentToEditNote.putExtra("ImageData", savedImageArrayList.get(i));
                 startActivity(intentToEditNote);
                 Toast.makeText(getApplicationContext(), "Pressed" + notesDate[i], Toast.LENGTH_SHORT).show();
