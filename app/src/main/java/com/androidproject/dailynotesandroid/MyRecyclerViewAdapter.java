@@ -16,16 +16,16 @@ import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private List<Bitmap> mViewColors;
-    private List<String> mAnimals;
+    private List<Bitmap> mImageViews;
+    private List<String> noteImgNames;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, List<Bitmap> colors, List<String> animals) {
+    MyRecyclerViewAdapter(Context context, List<Bitmap> colors, List<String> imgNames) {
         this.mInflater = LayoutInflater.from(context);
-        this.mViewColors = colors;
-        this.mAnimals = animals;
+        this.mImageViews = colors;
+        this.noteImgNames = imgNames;
     }
 
     // inflates the row layout from xml when needed
@@ -39,8 +39,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the view and textview in each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Bitmap color = mViewColors.get(position);
-        String animal = mAnimals.get(position);
+        Bitmap color = mImageViews.get(position);
+        String animal = noteImgNames.get(position);
 //        holder.myView.setBackgroundColor(color);
         holder.myView.setImageBitmap(color);
         holder.myTextView.setText(animal);
@@ -50,7 +50,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // total number of rows
     @Override
     public int getItemCount() {
-        return mViewColors.size();
+        return mImageViews.size();
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -73,7 +73,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // convenience method for getting data at click position
     public String getItem(int id) {
-        return mAnimals.get(id);
+        return noteImgNames.get(id);
     }
 
     // allows clicks events to be caught

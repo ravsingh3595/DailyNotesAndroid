@@ -33,6 +33,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.androidproject.dailynotesandroid.Database.DBNote;
+import com.androidproject.dailynotesandroid.Database.DBSubject;
 import com.androidproject.dailynotesandroid.Model.Note;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -56,6 +58,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     private int GALLERY = 1, CAMERA = 2;
 
 
+
     Button saveNote;
     EditText txtNoteTitle;
     EditText txtNoteContent;
@@ -66,15 +69,17 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
 
 
-    private LinearLayout mGallery;
-    ArrayList<Bitmap> mImgIds = new ArrayList<Bitmap>();
 
+    private LinearLayout mGallery;
     private LayoutInflater mInflater;
     private HorizontalScrollView horizontalScrollView;
-
     private MyRecyclerViewAdapter adapter;
+
     RecyclerView recyclerView;
-    Note note;
+    ArrayList<Bitmap> mImgIds = new ArrayList<Bitmap>();
+    ArrayList<String> mImgUrls = new ArrayList<String>();
+
+    DBNote dbSubject = new DBNote(AddNote.this);
 
 
     @Override
@@ -86,6 +91,13 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         txtNoteContent = (EditText) findViewById(R.id.txtNoteContent);
 
         recyclerView = findViewById(R.id.rvAnimals);
+
+        Bundle location = getIntent().getExtras();
+        if (location != null){
+            Toast.makeText(AddNote.this, "Something inside", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(AddNote.this, "Something inside", Toast.LENGTH_SHORT).show();
+        }
 
         requestMultiplePermissions();
 
@@ -147,17 +159,17 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     private void setupRecyclerView() {
 
-        ArrayList<String> animalNames = new ArrayList<>();
+        ArrayList<String> noteImgNames = new ArrayList<>();
 
         // set up the RecyclerView
         if (mImgIds.size() > 0){
 
             for (int i = 0; i < mImgIds.size(); i++) {
-                animalNames.add("");
+                noteImgNames.add("");
                 LinearLayoutManager horizontalLayoutManager
                         = new LinearLayoutManager(AddNote.this, LinearLayoutManager.HORIZONTAL, false);
                 recyclerView.setLayoutManager(horizontalLayoutManager);
-                adapter = new MyRecyclerViewAdapter(this, mImgIds, animalNames);
+                adapter = new MyRecyclerViewAdapter(this, mImgIds, noteImgNames);
                 adapter.setClickListener(this);
                 recyclerView.setAdapter(adapter);
             }
@@ -187,8 +199,6 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
                     saveImage(mImgIds.get(i));
                 }
             }
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -334,7 +344,20 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     @Override
     public void onItemClick(View view, int position) {
+//        Intent intent = new Intent(AddNote.this, ShowFullImageActivity.class);
+//        intent.putExtra("BitmapImage", mImgIds.get(position));
+//        startActivity(intent);
+//        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
+
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
+        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+        mImgIds.get(position).compress(Bitmap.CompressFormat.PNG, 100, bStream);
+        byte[] byteArray = bStream.toByteArray();
+
+        Intent anotherIntent = new Intent(this, ShowFullImageActivity.class);
+        anotherIntent.putExtra("image", byteArray);
+        startActivity(anotherIntent);
+        finish();
     }
 
     /* Record Audio file */
