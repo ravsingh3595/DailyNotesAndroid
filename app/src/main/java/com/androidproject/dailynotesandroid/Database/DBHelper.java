@@ -22,8 +22,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Log.d(TAG, "onCreate Called");
 
-        String subjectTable = "CREATE TABLE" + DBSubject.TABLE_SUBJECT + "(" +
-                 DBSubject.SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+        String subjectTable = "CREATE TABLE " + DBSubject.TABLE_SUBJECT + "(" +
+                 DBSubject.SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                  DBSubject.SUBJECT_NAME + " TEXT default null)";
 
         sqLiteDatabase.execSQL(subjectTable);
@@ -31,11 +31,12 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "onCreate Success for SubjectTable");
 
         String noteTable = "CREATE TABLE " + DBNote.TABLE_NOTE + "("
-                + DBNote.NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + DBNote.NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DBNote.SUBJECT_NAME + " TEXT NOT NULL,"
                 + DBNote.NOTE_TITLE + " TEXT default null,"
                 + DBNote.NOTE_CONTENT + " TEXT default null,"
                 + DBNote.AUDIO + " TEXT default null,"
-                + DBNote.DATETIME + " DATE default null,"
+                + DBNote.DATETIME + " TEXT default null,"
                 + DBNote.LATITUDE + " FLOAT default null,"
                 + DBNote.LONGITUDE + " FLOAT default null,"
                 + DBNote.IMAGE_ID + " INTEGER default null)";
@@ -44,6 +45,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "onCreate Success for NoteTable");
 
+        String imageTable = "CREATE TABLE " + DBImage.TABLE_IMAGE + "(" +
+                DBImage.IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                DBImage.IMAGE_LOCATION + " TEXT default null)";
+
+        sqLiteDatabase.execSQL(imageTable);
+
+        Log.d(TAG, "onCreate Success for imageTable");
     }
 
     @Override

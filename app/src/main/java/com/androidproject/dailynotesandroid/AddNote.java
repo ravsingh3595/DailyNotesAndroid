@@ -19,11 +19,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.PermissionRequest;
+
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.androidproject.dailynotesandroid.Database.DBImage;
+import com.androidproject.dailynotesandroid.Database.DBNote;
+import com.androidproject.dailynotesandroid.Model.Image;
+
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidproject.dailynotesandroid.Database.DBNote;
 import com.androidproject.dailynotesandroid.Database.DBSubject;
@@ -48,6 +56,20 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     private static final String IMAGE_DIRECTORY = "/dailynote";
     private int GALLERY = 1, CAMERA = 2;
+
+
+
+    Button saveNote;
+    EditText txtNoteTitle;
+    EditText txtNoteContent;
+
+    boolean isEdit = false;
+    DBImage dbImage = new DBImage(AddNote.this);
+    DBNote dbNote = new DBNote(AddNote.this);
+
+
+
+
     private LinearLayout mGallery;
     private LayoutInflater mInflater;
     private HorizontalScrollView horizontalScrollView;
@@ -59,10 +81,14 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     DBNote dbSubject = new DBNote(AddNote.this);
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+        saveNote = (Button) findViewById(R.id.saveNote);
+        txtNoteTitle = (EditText) findViewById(R.id.txtNoteTitle);
+        txtNoteContent = (EditText) findViewById(R.id.txtNoteContent);
 
         recyclerView = findViewById(R.id.rvAnimals);
 
@@ -75,11 +101,61 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
         requestMultiplePermissions();
 
+
+        Bundle noteData = getIntent().getExtras();
+        if (noteData != null){
+            isEdit = true;
+
+        }
+
+        saveNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isEdit){
+
+
+                    //UPDATE Database
+
+//                    dbNote.updateNote(note);
+//                    dbImage.updateImage(image);
+                }
+                else{
+                    //SAVE Database
+
+//                    dbNote.insertNote(populateDataNote());
+//                    dbImage.insertImage(populateDataImage());
+                }
+
+
+            }
+        });
+
         mInflater = LayoutInflater.from(this);
 
         setupRecyclerView();
+    }
+
+    public Note populateDataNote(){
+        Note note = new Note();
+        note.setNoteTitle(txtNoteTitle.getText().toString());
+        note.setNoteContent(txtNoteContent.getText().toString());
+//        note.setAudio();
+//        note.setDateTime();
+//        note.setLatitude();
+//        note.setLongitude();
+//        note.setImageId();
+        return note;
+    }
+
+    public Image populateDataImage(){
+        Image image = new Image();
+//        image.setImageLocation();
+        return image;
+
+
 
     }
+
 
     private void setupRecyclerView() {
 
@@ -107,6 +183,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
+
     }
 
     // handle action bar button activitiy

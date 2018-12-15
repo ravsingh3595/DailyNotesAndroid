@@ -19,16 +19,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidproject.dailynotesandroid.Database.DBImage;
+import com.androidproject.dailynotesandroid.Database.DBNote;
+import com.androidproject.dailynotesandroid.Model.Image;
+import com.androidproject.dailynotesandroid.Model.Note;
 import com.github.clans.fab.FloatingActionButton;
+
+import java.util.ArrayList;
 
 
 public class NoteListActivity extends AppCompatActivity {
 
     FloatingActionButton addNote;
     ListView noteListView;
+    View notePage;
+
+    DBImage dbImage = new DBImage(NoteListActivity.this);
+    DBNote dbNote = new DBNote(NoteListActivity.this);
 
     String[] notes = {"I love Maths", "I love English", "I love Science", "I love Coding"};
     String[] notesDate = {"Dec 21", "Mar 5", "June 2", "Apr 10"};
+
+    ArrayList<Note> savedNoteArrayList = new ArrayList<>();
+    ArrayList<Image> savedImageArrayList = new ArrayList<>();
 
 
     @Override
@@ -37,23 +50,28 @@ public class NoteListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_list);
         addNote = (FloatingActionButton) findViewById(R.id.addNote);
         noteListView = (ListView) findViewById(R.id.noteListView);
+        notePage = (View) findViewById(R.id.notePage);
+
 
 
         Bundle subjectName = getIntent().getExtras();
         if (subjectName != null){
-            Toast.makeText(getApplicationContext(), "Subject " + subjectName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Subject " +  subjectName.get("SubjectName"), Toast.LENGTH_SHORT).show();
         }
 
-//
         CustomAdapter adapter = new CustomAdapter();
         noteListView.setAdapter(adapter);
+
+        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
+        savedImageArrayList = dbImage.getAllImages(NoteListActivity.this);
 
         noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
-//                intentToNote.putExtra("NoteData", );
-                startActivity(intentToNote);
+                Intent intentToEditNote = new Intent(getApplicationContext(), AddNote.class);
+                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
+//                intentToEditNote.putExtra("ImageData", savedImageArrayList.get(i));
+                startActivity(intentToEditNote);
                 Toast.makeText(getApplicationContext(), "Pressed" + notesDate[i], Toast.LENGTH_SHORT).show();
             }
         });
