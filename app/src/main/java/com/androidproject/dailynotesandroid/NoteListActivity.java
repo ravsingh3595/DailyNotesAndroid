@@ -52,14 +52,6 @@ public class NoteListActivity extends AppCompatActivity {
 
     private static final String TAG = "NoteListActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 15f;
-    private Boolean mLocationPermissionsGranted = false;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-    LatLng currentLatLng = null;
-    LatLng recentLatLng = null;
 
     DBImage dbImage = new DBImage(NoteListActivity.this);
     DBNote dbNote = new DBNote(NoteListActivity.this);
@@ -70,8 +62,6 @@ public class NoteListActivity extends AppCompatActivity {
     ArrayList<Note> savedNoteArrayList = new ArrayList<>();
     ArrayList<Image> savedImageArrayList = new ArrayList<>();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +69,8 @@ public class NoteListActivity extends AppCompatActivity {
         addNote = (FloatingActionButton) findViewById(R.id.addNote);
         noteListView = (ListView) findViewById(R.id.noteListView);
         notePage = (View) findViewById(R.id.notePage);
+
+
 
 
         Bundle subjectName = getIntent().getExtras();
@@ -99,10 +91,9 @@ public class NoteListActivity extends AppCompatActivity {
 //                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
 //                intentToEditNote.putExtra("ImageData", savedImageArrayList.get(i));
                 if(isServicesOK()) {
-                    intentToEditNote.putExtra("LatLngFromNote", getLocationPermission());
+                    startActivity(intentToEditNote);
+                    Toast.makeText(getApplicationContext(), "Pressed" + notesDate[i], Toast.LENGTH_SHORT).show();
                 }
-                startActivity(intentToEditNote);
-                Toast.makeText(getApplicationContext(), "Pressed" + notesDate[i], Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -120,8 +111,19 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(isServicesOK()){
+//                    if(mLocationPermissionsGranted == true){
+//                        LatLng latLng = getDeviceLocation();
+//                        Log.d(TAG, "It came here");
+//                        Toast.makeText(getApplicationContext(), "Lat " + latLng.latitude + "Long " + latLng.longitude, Toast.LENGTH_SHORT).show();
+//                    }
+//                    else{
+//                        Toast.makeText(getApplicationContext(), "No location Permissions", Toast.LENGTH_SHORT).show();
+//                    }
                     Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
-                    intentToNote.putExtra("LatLngFromNote", getLocationPermission());
+                    Bundle b = new Bundle();
+////                    b.putDouble("LatFromNote", latLng.latitude);
+////                    b.putDouble("LngFromNote", latLng.longitude);
+                    intentToNote.putExtras(b);
                     startActivity(intentToNote);
                 }
 
@@ -130,67 +132,9 @@ public class NoteListActivity extends AppCompatActivity {
 
     }
 
-    private LatLng getLocationPermission(){
-        Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                mLocationPermissionsGranted = true;
-                currentLatLng = getDeviceLocation();
 
 
-
-
-            }else{
-                ActivityCompat.requestPermissions(this,
-                        permissions,
-                        LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        }else{
-            ActivityCompat.requestPermissions(this,
-                    permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        }
-        return currentLatLng;
-    }
-    private LatLng getDeviceLocation(){
-
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
-
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        try{
-            if(mLocationPermissionsGranted){
-
-                final Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
-
-                            recentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-
-                        }else{
-                            Log.d(TAG, "onComplete: current location is null");
-                            Toast.makeText(NoteListActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
-        }
-        return recentLatLng;
-    }
-
-
-        public boolean isServicesOK(){
+    public boolean isServicesOK(){
         Log.d(TAG, "isServicesOK: checking google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(NoteListActivity.this);
