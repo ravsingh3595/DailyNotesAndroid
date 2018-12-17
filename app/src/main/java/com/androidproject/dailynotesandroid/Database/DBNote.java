@@ -43,7 +43,7 @@ public class DBNote {
         contentValues.put(NOTE_TITLE, note.getNoteTitle());
         contentValues.put(NOTE_CONTENT, note.getNoteContent());
         contentValues.put(AUDIO, note.getAudio());
-        contentValues.put(DATETIME, String.valueOf(note.getDateTime()));
+        contentValues.put(DATETIME, (note.getDateTime()));
         contentValues.put(LATITUDE, note.getLatitude());
         contentValues.put(LONGITUDE, note.getLongitude());
         contentValues.put(IMAGE_ID, note.getImageId());
@@ -101,9 +101,9 @@ public class DBNote {
                     note.setNoteTitle(cursor.getString(2));
                     note.setNoteContent(cursor.getString(3));
                     note.setAudio(cursor.getString(4));
-//                    note.setDateTime(cursor.getString(5));
-                    note.setLatitude(cursor.getFloat(6));
-                    note.setLongitude(cursor.getFloat(7));
+                    note.setDateTime(cursor.getString(5));
+                    note.setLatitude(cursor.getDouble(6));
+                    note.setLongitude(cursor.getDouble(7));
                     note.setImageId(cursor.getInt(8));
 
                     Log.d("AllNoteData", note.getNoteTitle());
@@ -133,8 +133,8 @@ public class DBNote {
                 note.setNoteContent(cursor.getString(3));
                 note.setAudio(cursor.getString(4));
 //              note.setDateTime(cursor.getString(5));
-                note.setLatitude(cursor.getFloat(6));
-                note.setLongitude(cursor.getFloat(7));
+                note.setLatitude(cursor.getDouble(6));
+                note.setLongitude(cursor.getDouble(7));
                 note.setImageId(cursor.getInt(8));
 
                 Log.d("NoteData", note.getNoteTitle());
@@ -142,5 +142,62 @@ public class DBNote {
         }
         database.close();
         return note1;
+    }
+
+    public ArrayList<Note> getNoteOfSubject (Context context, String subjectName){
+
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+
+//        String selectQuery = "SELECT * FROM " + TABLE_NOTE + ;                          //ADD Where clause
+//        Cursor cursor = database.rawQuery(selectQuery, null);
+//        public static final String TABLE_NOTE = "tblNote";
+//        public static final String SUBJECT_NAME = "subjectName";
+//        public static final String NOTE_ID = "noteId";
+//        public static final String NOTE_TITLE = "noteTitle";
+//        public static final String NOTE_CONTENT = "noteContent";
+//        public static final String AUDIO = "audio";
+//        public static final String DATETIME = "dateTime";
+//        public static final String LATITUDE = "latitude";
+//        public static final String LONGITUDE = "longitude";
+//        public static final String IMAGE_ID = "imageId";
+
+
+        String[] columns ={NOTE_ID, SUBJECT_NAME, NOTE_TITLE, NOTE_CONTENT, AUDIO, DATETIME, LATITUDE, LONGITUDE, IMAGE_ID};
+
+//        Cursor findEntry = db.query("sku_table", columns, "owner=?", new String[] { owner }, null, null, null);
+
+        Cursor cursor = database.query(TABLE_NOTE,
+                columns,
+                SUBJECT_NAME + "=?",
+                new String[]{subjectName},
+                null,
+                null,
+                null);
+
+        ArrayList<Note> noteArrayList = new ArrayList<>();
+        if(cursor !=null)
+        {
+            if(cursor.getCount() >=1)
+            {
+                while (cursor.moveToNext()) {
+                    Note note = new Note();
+
+                    note.setSubjectName(cursor.getString(1));
+                    note.setNoteTitle(cursor.getString(2));
+                    note.setNoteContent(cursor.getString(3));
+                    note.setAudio(cursor.getString(4));
+                    note.setDateTime(cursor.getString(5));
+                    note.setLatitude(cursor.getDouble(6));
+                    note.setLongitude(cursor.getDouble(7));
+                    note.setImageId(cursor.getInt(8));
+
+                    Log.d("NoteDataWithSubject", (cursor.getColumnName(1)));
+                    noteArrayList.add(note);
+                }
+            }
+        }
+        database.close();
+        return noteArrayList;
     }
 }
