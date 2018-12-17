@@ -70,6 +70,8 @@ public class NoteListActivity extends AppCompatActivity {
 
     ArrayList<Note> savedNoteArrayList = new ArrayList<>();
     ArrayList<Image> savedImageArrayList = new ArrayList<>();
+
+
     Bundle subjectName;
 
 
@@ -83,11 +85,7 @@ public class NoteListActivity extends AppCompatActivity {
         notePage = (View) findViewById(R.id.notePage);
 
         etSearch = (EditText) findViewById(R.id.etSearch);
-
-
 //        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
-
-
 
         subjectName = getIntent().getExtras();
         if (subjectName != null){
@@ -99,32 +97,23 @@ public class NoteListActivity extends AppCompatActivity {
 
 
         }
-        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName.getString("SubjectName"));
+//        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName.getString("SubjectName"));
+        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, "Maths");
 
 
-
-        savedNoteArrayList.add(new Note("Note 1", "Sonia"));
-        savedNoteArrayList.add(new Note("Note 2", "vaneet"));
-        savedNoteArrayList.add(new Note("Note 3", "laxmi"));
-        savedNoteArrayList.add(new Note("Note 4", "geeta"));
-        savedNoteArrayList.add(new Note("Note 5", "vani"));
-        savedNoteArrayList.add(new Note("Note 6", "soni"));
 
         final CustomAdapter adapter = new CustomAdapter(NoteListActivity.this, savedNoteArrayList);
 
         noteListView.setAdapter(adapter);
 
-
-//        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
-//        savedImageArrayList = dbImage.getAllImages(NoteListActivity.this);
-
         noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentToEditNote = new Intent(getApplicationContext(), AddNote.class);
-                Bundle EditNoteBundle = new Bundle();
-                EditNoteBundle.putBoolean("isEdit", true);
-//                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
+                Bundle editNoteBundle = new Bundle();
+                editNoteBundle.putBoolean("isEdit", true);
+                intentToEditNote.putExtra("bundle", editNoteBundle);
+                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
 //                intentToEditNote.putExtra("ImageData", savedImageArrayList.get(i));
                 if(isServicesOK()) {
                     startActivity(intentToEditNote);
@@ -147,19 +136,9 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(isServicesOK()){
-//                    if(mLocationPermissionsGranted == true){
-//                        LatLng latLng = getDeviceLocation();
-//                        Log.d(TAG, "It came here");
-//                        Toast.makeText(getApplicationContext(), "Lat " + latLng.latitude + "Long " + latLng.longitude, Toast.LENGTH_SHORT).show();
-//                    }
-//                    else{
-//                        Toast.makeText(getApplicationContext(), "No location Permissions", Toast.LENGTH_SHORT).show();
-//                    }
                     Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
                     Bundle b = new Bundle();
                     b.putString("subjectName", (String) subjectName.get("SubjectName"));
-////                    b.putDouble("LatFromNote", latLng.latitude);
-////                    b.putDouble("LngFromNote", latLng.longitude);
                     intentToNote.putExtras(b);
                     startActivity(intentToNote);
                 }

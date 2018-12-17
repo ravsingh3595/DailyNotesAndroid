@@ -90,6 +90,8 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     DBImage dbImage = new DBImage(AddNote.this);
     DBNote dbNote = new DBNote(AddNote.this);
 
+    Note noteIsEdit = new Note();         //if is edit option is selected ude this array
+
     private LinearLayout mGallery;
     private LayoutInflater mInflater;
     private HorizontalScrollView horizontalScrollView;
@@ -104,6 +106,8 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     Note myNoteObj = new Note();
     ArrayList<String> myImagesUrl = new ArrayList<String>(); // use array to save in database
     AudioSingleton audioSingleton = null;
+
+    String audioUrl;
 
     String subjectName;
 
@@ -140,8 +144,18 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
         Bundle noteData = getIntent().getExtras();
         if (noteData != null){
-//            isEdit = true;
-            subjectName = noteData.getString("subjectName");
+            isEdit = noteData.getBoolean("isEdit");
+            noteIsEdit = (Note) noteData.get("NoteData");
+//            subjectName = noteData.getString("subjectName");
+        }
+
+        if(isEdit == true){
+
+            txtNoteTitle.setText(noteIsEdit.getNoteTitle());
+            txtNoteContent.setText(noteIsEdit.getNoteContent());
+            audioUrl = noteIsEdit.getAudio();
+            recentLatLng = new LatLng(noteIsEdit.getLatitude(), noteIsEdit.getLongitude());
+            
         }
 
         /* save image */
@@ -179,18 +193,32 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = sdf.format(new Date()); // pass date that get from database
 
-        Toast.makeText(AddNote.this, "Time" + strDate, Toast.LENGTH_SHORT).show();
+        if (isEdit == true){
 
-        Note note = new Note();
-        note.setSubjectName(subjectName);
-        note.setNoteTitle(txtNoteTitle.getText().toString());
-        note.setNoteContent(txtNoteContent.getText().toString());
-        note.setAudio(audioSingleton.getAudioUrl());
-        note.setDateTime(strDate);
-        note.setLatitude(latitude);
-        note.setLongitude(longitude);
+            Note note = new Note();
+//            note.setSubjectName(subjectName);
+            note.setNoteTitle(txtNoteTitle.getText().toString());
+            note.setNoteContent(txtNoteContent.getText().toString());
+            note.setAudio(audioSingleton.getAudioUrl());
+            note.setDateTime(strDate);
+            note.setLatitude(latitude);
+            note.setLongitude(longitude);
 //        note.setImageId();
-        return note;
+            return note;
+
+        }
+        else {
+            Note note = new Note();
+//            note.setSubjectName(subjectName);
+            note.setNoteTitle(txtNoteTitle.getText().toString());
+            note.setNoteContent(txtNoteContent.getText().toString());
+            note.setAudio(audioSingleton.getAudioUrl());
+            note.setDateTime(strDate);
+            note.setLatitude(latitude);
+            note.setLongitude(longitude);
+//        note.setImageId();
+            return note;
+        }
     }
 
     public void populateDataImage(){
