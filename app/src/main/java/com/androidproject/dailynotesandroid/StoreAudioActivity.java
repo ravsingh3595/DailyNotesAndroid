@@ -31,6 +31,9 @@ public class StoreAudioActivity extends AppCompatActivity {
     String RandomAudioFileName = "audio_file";
     public static final int RequestPermissionCode = 1;
     MediaPlayer mediaPlayer ;
+    String audioURL;
+
+    Boolean isEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +44,22 @@ public class StoreAudioActivity extends AppCompatActivity {
         btnRecod = (Button) findViewById(R.id.btnRecord);
         btnStop = (Button) findViewById(R.id.btnStop);
 
+
         btnStop.setEnabled(false);
         btnPlay.setEnabled(false);
-
         random = new Random();
+
+        Intent intent = getIntent();
+        audioURL = intent.getExtras().getString("audiourl");
+        isEdit = getIntent().getExtras().getBoolean("isEdit");
+
+        if (isEdit){
+
+            RandomAudioFileName = audioURL;
+        }else{
+
+            RandomAudioFileName = "audio_file";
+        }
 
         btnRecod.setOnClickListener(new View.OnClickListener() {
             @Override
