@@ -130,14 +130,13 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
         Intent intent = this.getIntent();
         Bundle noteData = intent.getExtras();
+        subjectName = SubjectSingleton.getInstance().getSubjectName();
 
         if (noteData != null){
             isEdit = noteData.getBoolean("isEdit");
             noteIsEdit = (Note) noteData.getSerializable("NoteData");
 //            imageIsEdit = (Image) noteData.getSerializable("ImageData");
-            subjectName = noteData.getString("subjectName");
-        }else{
-
+//             subjectName = noteData.getString("subjectName");
         }
 
         if(isEdit == true){
@@ -145,6 +144,12 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             txtNoteContent.setText(noteIsEdit.getNoteContent());
             audioUrl = noteIsEdit.getAudio();
             recentLatLng = new LatLng(noteIsEdit.getLatitude(), noteIsEdit.getLongitude());
+
+            myImagesUrl.add(0, noteIsEdit.getImage1());
+            myImagesUrl.add(1, noteIsEdit.getImage2());
+            myImagesUrl.add(2, noteIsEdit.getImage3());
+
+
         }
 
         /* save image */
@@ -167,8 +172,6 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
                     Toast.makeText(AddNote.this, "Data saved", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), NoteListActivity.class);
                     startActivity(i);
-
-//                    dbImage.insertImage(populateDataImage());
                 }
             }
         });
@@ -178,6 +181,9 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         setupRecyclerView();
 
         audioSingleton = AudioSingleton.getInstance();
+        Toast.makeText(AddNote.this, "Audio" + audioSingleton.getAudioUrl(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(AddNote.this, "Name "+ subjectName, Toast.LENGTH_SHORT).show();
+
     }
 
     public Note populateDataNote(){
@@ -195,12 +201,29 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             note.setLatitude(latitude);
             note.setLongitude(longitude);
 //        note.setImageId();
+            if (myImagesUrl.size() > 0)
+            {
+                if (myImagesUrl.size() >=1)
+                {
+                    note.setImage1(myImagesUrl.get(0));
+                }
+                if (myImagesUrl.size() >= 2)
+                {
+                    note.setImage2(myImagesUrl.get(1));
+                }
+                if (myImagesUrl.size() >= 3)
+                {
+                    note.setImage3(myImagesUrl.get(2));
+                }
+            }
+
             return note;
 
         }
         else {
             Note note = new Note();
             note.setSubjectName(subjectName);
+
             note.setNoteTitle(txtNoteTitle.getText().toString());
             note.setNoteContent(txtNoteContent.getText().toString());
             note.setAudio(audioSingleton.getAudioUrl());
@@ -208,6 +231,20 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             note.setLatitude(latitude);
             note.setLongitude(longitude);
 //        note.setImageId();
+            if (myImagesUrl.size() > 0)
+            {
+                if (myImagesUrl.size() == 1)
+                {
+                    note.setImage1(myImagesUrl.get(0));
+                }
+                if (myImagesUrl.size() == 2)
+                {
+                    note.setImage2(myImagesUrl.get(1));
+                }
+                if (myImagesUrl.size() == 3) {
+                    note.setImage3(myImagesUrl.get(2));
+                }
+            }
             return note;
         }
     }
