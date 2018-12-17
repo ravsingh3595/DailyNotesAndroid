@@ -41,7 +41,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class NoteListActivity extends AppCompatActivity {
@@ -180,7 +182,15 @@ public class NoteListActivity extends AppCompatActivity {
             TextView dateTextView = (TextView)view.findViewById(R.id.dateTextView);
 
             noteTextView.setText(notes[i]);
-            dateTextView.setText(notesDate[i]);
+//            dateTextView.setText(notesDate[i]); // comment by sonia
+
+
+            /* sonia changes */
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate = sdf.format(new Date()); // pass date that get from database
+            dateTextView.setText(strDate);
+            /********************************/
+
 
             return view;
         }
