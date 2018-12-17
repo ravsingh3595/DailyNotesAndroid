@@ -136,16 +136,15 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             noteIsEdit = (Note) noteData.getSerializable("NoteData");
 //            imageIsEdit = (Image) noteData.getSerializable("ImageData");
             subjectName = noteData.getString("subjectName");
+        }else{
+
         }
 
         if(isEdit == true){
-
             txtNoteTitle.setText(noteIsEdit.getNoteTitle());
             txtNoteContent.setText(noteIsEdit.getNoteContent());
             audioUrl = noteIsEdit.getAudio();
             recentLatLng = new LatLng(noteIsEdit.getLatitude(), noteIsEdit.getLongitude());
-
-
         }
 
         /* save image */
@@ -376,9 +375,10 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     public void audioButtonClick(View view) {
         Intent intent = new Intent(AddNote.this, StoreAudioActivity.class);
+        intent.putExtra("audiourl", audioUrl);
+        intent.putExtra("isEdit", isEdit);
         startActivity(intent);
-        finish();
-
+//        finish();
     }
 
     public void mapButtonClick(View view) {
@@ -519,4 +519,33 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     /* Record Audio file */
 
+}
+
+
+// Java program implementing Singleton class
+// with getInstance() method
+class NoteSingleton
+{
+    // static variable single_instance of type Singleton
+    private static NoteSingleton single_instance = null;
+
+    // variable of type String
+    public Note note;
+
+    public Note getNoteObject() {
+        return note;
+    }
+
+    public void setNoteObject(Note note) {
+        this.note = note;
+    }
+
+    // static method to create instance of Singleton class
+    public static NoteSingleton getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new NoteSingleton();
+
+        return single_instance;
+    }
 }
