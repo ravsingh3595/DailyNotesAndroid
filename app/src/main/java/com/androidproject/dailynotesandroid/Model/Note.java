@@ -24,13 +24,13 @@ public class Note implements Serializable {
         this.noteContent = noteContent;
     }
 
-    public Note(String subjectName, int noteId, String noteTitle, String noteContent, String audio, Date dateTime, float latitude, float longitude, int imageId) {
+    public Note(String subjectName, int noteId, String noteTitle, String noteContent, String audio, String dateTime, double latitude, double longitude, int imageId) {
         this.subjectName = subjectName;
         this.noteId = noteId;
         this.noteTitle = noteTitle;
         this.noteContent = noteContent;
         this.audio = audio;
-//        this.dateTime = dateTime; // sonia change
+        this.dateTime = dateTime; // sonia change
         this.latitude = latitude;
         this.longitude = longitude;
         this.imageId = imageId;
