@@ -342,9 +342,10 @@ public class NoteListActivity extends AppCompatActivity {
 
 
                         for (int i = 0; i < mOriginalValues.size(); i++) {
+
                             String data = mOriginalValues.get(i).getNoteTitle();
 
-                            String data1 = mOriginalValues.get(i).getNoteContent();
+                            String data1 = mOriginalValues.get(i).getDateTime();
 
 
 //                            data = mOriginalValues.get(i).getNoteContent();
@@ -354,6 +355,7 @@ public class NoteListActivity extends AppCompatActivity {
 
 //                                (String subjectName, int noteId, String noteTitle, String noteContent, String audio, Date dateTime, float latitude, float longitude, int imageId)
                             }
+
                         }
                         // set the Filtered result to return
                         results.count = FilteredArrList.size();

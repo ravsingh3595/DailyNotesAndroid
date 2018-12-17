@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidproject.dailynotesandroid.Database.DBNote;
 import com.androidproject.dailynotesandroid.Database.DBSubject;
 import com.androidproject.dailynotesandroid.Model.Subject;
 import com.github.clans.fab.FloatingActionButton;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     EditText addSubjectEditBox;
 
     DBSubject dbSubject = new DBSubject(MainActivity.this);
+    DBNote dbNote =  new DBNote(MainActivity.this);
     ArrayList<Subject> savedSubjectsArraylist = new ArrayList<>();
 
 
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "row number" + i1, Toast.LENGTH_SHORT).show();
                 dbSubject.deleteSubject(savedSubjectsArraylist.get(i1));
+                dbNote.deleteNoteWithSubject((savedSubjectsArraylist.get(i1)));
 
 
                 //Delete all the notes in this subject here.
