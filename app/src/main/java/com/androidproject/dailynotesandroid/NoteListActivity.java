@@ -109,8 +109,7 @@ public class NoteListActivity extends AppCompatActivity {
             savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName);
 
         }
-
-        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName.getString("SubjectName"));
+        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName);
 
         final CustomAdapter adapter = new CustomAdapter(NoteListActivity.this, savedNoteArrayList);
 
@@ -122,12 +121,13 @@ public class NoteListActivity extends AppCompatActivity {
                 Intent intentToEditNote = new Intent(getApplicationContext(), AddNote.class);
                 Bundle editNoteBundle = new Bundle();
                 editNoteBundle.putBoolean("isEdit", true);
-                intentToEditNote.putExtra("bundle", editNoteBundle);
-                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
-//                intentToEditNote.putExtra("ImageData", savedImageArrayList.get(i));
+                editNoteBundle.putSerializable("NoteData", savedNoteArrayList.get(i));
+//                editNoteBundle.putSerializable("ImageData", savedImageArrayList.get(i));
+                intentToEditNote.putExtras(editNoteBundle);
+
                 if(isServicesOK()) {
                     startActivity(intentToEditNote);
-                    Toast.makeText(getApplicationContext(), "Pressed" + notesDate[i], Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Pressed" + notesDate[i], Toast.LENGTH_SHORT).show();
                 }
             }
         });

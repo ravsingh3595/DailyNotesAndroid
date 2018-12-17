@@ -23,6 +23,11 @@ public class DBNote {
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
     public static final String IMAGE_ID = "imageId";
+    public static final String IMAGE_1 = "image1";
+    public static final String IMAGE_2 = "image2";
+    public static final String IMAGE_3 = "image3";
+
+
 
 
     private Context context;
