@@ -39,6 +39,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 + DBNote.DATETIME + " TEXT default null,"
                 + DBNote.LATITUDE + " DOUBLE default null,"
                 + DBNote.LONGITUDE + " DOUBLE default null,"
+//                + DBNote.LONGITUDE + " DOUBLE default null,"
+//                + DBNote.LONGITUDE + " DOUBLE default null,"
+
+
                 + DBNote.IMAGE_ID + " INTEGER default null)";
 
         sqLiteDatabase.execSQL(noteTable);

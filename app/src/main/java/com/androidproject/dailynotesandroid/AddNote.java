@@ -91,6 +91,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     DBNote dbNote = new DBNote(AddNote.this);
 
     Note noteIsEdit = new Note();         //if is edit option is selected ude this array
+    Image imageIsEdit = new Image();
 
     private LinearLayout mGallery;
     private LayoutInflater mInflater;
@@ -125,28 +126,16 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         getLocationPermission();
         getDeviceLocation();
 
-
-//        if (latitude == 0){
-//            Toast.makeText(getApplicationContext(), "Longitude null" + latitude, Toast.LENGTH_SHORT).show();
-//        }else {
-//            Toast.makeText(getApplicationContext(), "Longitude" + latitude, Toast.LENGTH_SHORT).show();
-//
-//        }
-//        Bundle location = getIntent().getExtras();
-//        if (location != null){
-//            Toast.makeText(AddNote.this, "Something inside", Toast.LENGTH_SHORT).show();
-//        }else {
-//            Toast.makeText(AddNote.this, "Something inside", Toast.LENGTH_SHORT).show();
-//        }
-
         requestMultiplePermissions();
 
+        Intent intent = this.getIntent();
+        Bundle noteData = intent.getExtras();
 
-        Bundle noteData = getIntent().getExtras();
         if (noteData != null){
             isEdit = noteData.getBoolean("isEdit");
-            noteIsEdit = (Note) noteData.get("NoteData");
-//            subjectName = noteData.getString("subjectName");
+            noteIsEdit = (Note) noteData.getSerializable("NoteData");
+//            imageIsEdit = (Image) noteData.getSerializable("ImageData");
+            subjectName = noteData.getString("subjectName");
         }
 
         if(isEdit == true){
@@ -155,7 +144,8 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             txtNoteContent.setText(noteIsEdit.getNoteContent());
             audioUrl = noteIsEdit.getAudio();
             recentLatLng = new LatLng(noteIsEdit.getLatitude(), noteIsEdit.getLongitude());
-            
+
+
         }
 
         /* save image */
@@ -166,7 +156,9 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
                 if (isEdit){
 
                     //UPDATE Database
-//                    dbNote.updateNote(note);
+                    dbNote.updateNote(populateDataNote());
+                    Intent i = new Intent(getApplicationContext(), NoteListActivity.class);
+                    startActivity(i);
 //                    dbImage.updateImage(image);
                 }
                 else{
@@ -196,7 +188,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         if (isEdit == true){
 
             Note note = new Note();
-//            note.setSubjectName(subjectName);
+            note.setSubjectName(subjectName);
             note.setNoteTitle(txtNoteTitle.getText().toString());
             note.setNoteContent(txtNoteContent.getText().toString());
             note.setAudio(audioSingleton.getAudioUrl());
@@ -209,7 +201,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         }
         else {
             Note note = new Note();
-//            note.setSubjectName(subjectName);
+            note.setSubjectName(subjectName);
             note.setNoteTitle(txtNoteTitle.getText().toString());
             note.setNoteContent(txtNoteContent.getText().toString());
             note.setAudio(audioSingleton.getAudioUrl());
@@ -311,6 +303,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         latitude = latLng.latitude;
         longitude = latLng.longitude;
+        recentLatLng = latLng;
 
     }
 
