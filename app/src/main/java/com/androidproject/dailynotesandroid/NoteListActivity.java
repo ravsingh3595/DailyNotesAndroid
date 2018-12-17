@@ -70,7 +70,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     ArrayList<Note> savedNoteArrayList = new ArrayList<>();
     ArrayList<Image> savedImageArrayList = new ArrayList<>();
-    Bundle subjectName;
+    String subjectName;
 
 
 
@@ -89,26 +89,40 @@ public class NoteListActivity extends AppCompatActivity {
 
 
 
-        subjectName = getIntent().getExtras();
+
+
+        if (getIntent().getExtras() != null){
+            subjectName = getIntent().getExtras().get("SubjectName").toString();
+        }
+
         if (subjectName != null){
 
-//            Toast.makeText(getApplicationContext(), "Subject " +  subjectName.get("SubjectName"), Toast.LENGTH_SHORT).show();
-            setTitle(subjectName.get("SubjectName").toString());
+            SubjectSingleton.getInstance().setSubjectName(subjectName);
+            setTitle(subjectName);
 
-            Toast.makeText(getApplicationContext(), "Subject " +  subjectName.get("SubjectName"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Subject " +  subjectName, Toast.LENGTH_SHORT).show();
+            savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName);
 
+        }else{
+            subjectName = SubjectSingleton.getInstance().getSubjectName();
+            setTitle(subjectName);
+
+            Toast.makeText(getApplicationContext(), "Subject " +  subjectName, Toast.LENGTH_SHORT).show();
+            savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName);
 
         }
-        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName.getString("SubjectName"));
 
 
 
-        savedNoteArrayList.add(new Note("Note 1", "Sonia"));
-        savedNoteArrayList.add(new Note("Note 2", "vaneet"));
-        savedNoteArrayList.add(new Note("Note 3", "laxmi"));
-        savedNoteArrayList.add(new Note("Note 4", "geeta"));
-        savedNoteArrayList.add(new Note("Note 5", "vani"));
-        savedNoteArrayList.add(new Note("Note 6", "soni"));
+
+
+//
+//        savedNoteArrayList.add(new Note("Note 1", "Sonia"));
+//        savedNoteArrayList.add(new Note("Note 2", "vaneet"));
+//        savedNoteArrayList.add(new Note("Note 3", "laxmi"));
+//        savedNoteArrayList.add(new Note("Note 4", "geeta"));
+//        savedNoteArrayList.add(new Note("Note 5", "vani"));
+//        savedNoteArrayList.add(new Note("Note 6", "soni"));
 
         final CustomAdapter adapter = new CustomAdapter(NoteListActivity.this, savedNoteArrayList);
 
@@ -157,7 +171,7 @@ public class NoteListActivity extends AppCompatActivity {
 //                    }
                     Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
                     Bundle b = new Bundle();
-                    b.putString("subjectName", (String) subjectName.get("SubjectName"));
+                    b.putString("subjectName", (String) subjectName);
 ////                    b.putDouble("LatFromNote", latLng.latitude);
 ////                    b.putDouble("LngFromNote", latLng.longitude);
                     intentToNote.putExtras(b);
@@ -232,11 +246,11 @@ public class NoteListActivity extends AppCompatActivity {
 
 //             return mDisplayedValues.size();
 
-            if (savedNoteArrayList != null){
-                return savedNoteArrayList.size();
+            if (mDisplayedValues != null){
+                return mDisplayedValues.size();
             }
             else {
-                return notes.length;
+                return savedImageArrayList.size();
             }
 
         }
@@ -402,5 +416,35 @@ public class NoteListActivity extends AppCompatActivity {
 
         AlertDialog mAlertDialog = alertDialogBuilder.create();
         mAlertDialog.show();
+    }
+
+
+
+}
+
+
+class SubjectSingleton
+{
+    // static variable single_instance of type Singleton
+    private static SubjectSingleton single_instance = null;
+
+    // variable of type String
+    public String subjectName;
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    // static method to create instance of Singleton class
+    public static SubjectSingleton getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new SubjectSingleton();
+
+        return single_instance;
     }
 }
