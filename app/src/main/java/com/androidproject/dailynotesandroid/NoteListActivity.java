@@ -88,7 +88,6 @@ public class NoteListActivity extends AppCompatActivity {
 //        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
 
 
-
         if (getIntent().getExtras() != null){
             subjectName = getIntent().getExtras().get("SubjectName").toString();
         }
