@@ -63,6 +63,9 @@ public class NoteListActivity extends AppCompatActivity {
 
     ArrayList<Note> savedNoteArrayList = new ArrayList<>();
     ArrayList<Image> savedImageArrayList = new ArrayList<>();
+    Bundle subjectName;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +75,16 @@ public class NoteListActivity extends AppCompatActivity {
         noteListView = (ListView) findViewById(R.id.noteListView);
         notePage = (View) findViewById(R.id.notePage);
 
+//        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
 
 
-
-        Bundle subjectName = getIntent().getExtras();
+        subjectName = getIntent().getExtras();
         if (subjectName != null){
             Toast.makeText(getApplicationContext(), "Subject " +  subjectName.get("SubjectName"), Toast.LENGTH_SHORT).show();
+
         }
+        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName.getString("SubjectName"));
+
 
         CustomAdapter adapter = new CustomAdapter();
         noteListView.setAdapter(adapter);
@@ -90,6 +96,8 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentToEditNote = new Intent(getApplicationContext(), AddNote.class);
+                Bundle EditNoteBundle = new Bundle();
+                EditNoteBundle.putBoolean("isEdit", true);
 //                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
 //                intentToEditNote.putExtra("ImageData", savedImageArrayList.get(i));
                 if(isServicesOK()) {
@@ -123,6 +131,7 @@ public class NoteListActivity extends AppCompatActivity {
 //                    }
                     Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
                     Bundle b = new Bundle();
+                    b.putString("subjectName", (String) subjectName.get("SubjectName"));
 ////                    b.putDouble("LatFromNote", latLng.latitude);
 ////                    b.putDouble("LngFromNote", latLng.longitude);
                     intentToNote.putExtras(b);
@@ -161,7 +170,12 @@ public class NoteListActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return notes.length;
+            if (savedNoteArrayList != null){
+                return savedNoteArrayList.size();
+            }
+            else {
+                return notes.length;
+            }
         }
 
         @Override
@@ -181,15 +195,22 @@ public class NoteListActivity extends AppCompatActivity {
             TextView noteTextView = (TextView)view.findViewById(R.id.noteTextView);
             TextView dateTextView = (TextView)view.findViewById(R.id.dateTextView);
 
-            noteTextView.setText(notes[i]);
+            if (savedNoteArrayList != null){
+                noteTextView.setText(savedNoteArrayList.get(i).getNoteTitle());
+                dateTextView.setText(savedNoteArrayList.get(i).getDateTime());
+
+            }else {
+                noteTextView.setText(notes[i]);
 //            dateTextView.setText(notesDate[i]); // comment by sonia
 
 
-            /* sonia changes */
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String strDate = sdf.format(new Date()); // pass date that get from database
-            dateTextView.setText(strDate);
-            /********************************/
+                /* sonia changes */
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String strDate = sdf.format(new Date()); // pass date that get from database
+                dateTextView.setText(strDate);
+                /********************************/
+            }
+
 
 
             return view;

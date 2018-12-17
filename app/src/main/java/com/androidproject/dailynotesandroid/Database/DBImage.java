@@ -15,6 +15,8 @@ public class DBImage {
     public static final String TABLE_IMAGE = "tblImage";
     public static final String IMAGE_ID = "imageId";
     public static final String IMAGE_LOCATION = "imageLocation";
+    public static final String NOTE_ID = "noteId";
+
 
     private Context context;
     private DBHelper dbHelper;
@@ -31,6 +33,7 @@ public class DBImage {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(IMAGE_LOCATION, image.getImageLocation());
+        contentValues.put(NOTE_ID, image.getNoteId());
 
         database.insert(TABLE_IMAGE, null, contentValues);
         database.close();
@@ -43,6 +46,7 @@ public class DBImage {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(IMAGE_LOCATION, image.getImageLocation());
+        contentValues.put(NOTE_ID, image.getNoteId());
 
         database.update(TABLE_IMAGE, contentValues, IMAGE_ID + "=?", new String[]{(String.valueOf(image.getImageId()))});
         database.close();
@@ -76,6 +80,7 @@ public class DBImage {
                 {
                     Image image1 = new Image();
                     image1.setImageLocation(cursor.getString(1));
+                    image1.setNoteId(cursor.getInt(2));
 
                     Log.d("ImageData", image1.getImageLocation());
                     imageArrayList.add(image1);
