@@ -34,10 +34,10 @@ import android.content.pm.PackageManager;
         import com.google.android.gms.location.LocationListener;
 
 public class ShowUserLocationActivity extends FragmentActivity implements
-        OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener
+        OnMapReadyCallback
+//        GoogleApiClient.ConnectionCallbacks,
+//        GoogleApiClient.OnConnectionFailedListener,
+//        LocationListener
 
 {
 
@@ -62,9 +62,9 @@ public class ShowUserLocationActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_user_location);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            checkUserLocationPermission();
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//            checkUserLocationPermission();
+//        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -87,132 +87,17 @@ public class ShowUserLocationActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng objLatLng = getIntent().getExtras().getParcelable("Latlng");
 
-        if(isEdit){
-
-//            LatLng temp = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
-            LatLng temp = new LatLng(23.5678, 34.456);
+        if (objLatLng !=null){
+            LatLng temp = new LatLng(objLatLng.latitude, objLatLng.longitude);
             mMap.addMarker(new MarkerOptions().position(temp)
-                    .title("Note saved here"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(temp));
-
-
-        }
-        else{
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-
-                mMap.setMyLocationEnabled(true);
-            }
-        }
-
-
-    }
-
-    public boolean checkUserLocationPermission(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                }, Request_User_Location_Code);
-            }else {
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                }, Request_User_Location_Code);
-            }
-            return false;
-        }else {
-            return true;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case Request_User_Location_Code:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                        if (googleApiClient == null){
-                            buildGoogleApiClient();
-                        }
-                        mMap.setMyLocationEnabled(true);
-                    }
-                }else {
-                    Toast.makeText(this, "Permission denied..", Toast.LENGTH_SHORT).show();
-                }
-                return;
-        }
-    }
-
-    protected synchronized void buildGoogleApiClient(){
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        googleApiClient.connect();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        lastLocation = location;
-
-        if (currentUserLocationMarker != null){
-            currentUserLocationMarker.remove();
-        }
-
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("User Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
-        currentUserLocationMarker = mMap.addMarker(markerOptions);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(8));
-
-        if (googleApiClient !=null){
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+                    .title("Note saved location"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(temp, 15));
 
         }
 
-
-        userLocation = location;
-
     }
-
-    @Override
-    protected void onDestroy() {
-        Intent mIntent = new Intent();
-        mIntent.putExtra("Location", userLocation);
-        startActivity(mIntent);
-        super.onDestroy();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(1100);
-        locationRequest.setFastestInterval(1100);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
 
 }
 
