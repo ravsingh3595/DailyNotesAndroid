@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -192,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
             view = getLayoutInflater().inflate(R.layout.subject_table_cell, null);
 
             TextView sujectTextView = (TextView)view.findViewById(R.id.SubjectTextView);
+
+            ImageView image = (ImageView) findViewById(R.id.SubjectImageView);
+
 
             sujectTextView.setText(savedSubjectsArraylist.get(i).getSubjectName());
 //            Toast.makeText(getApplicationContext(), "Value for i " + savedSubjectsArraylist.get(i).getSubjectId(), Toast.LENGTH_SHORT).show();

@@ -72,6 +72,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     EditText txtNoteTitle;
     EditText txtNoteContent;
 
+
     private static final String TAG = "AddNote";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -326,6 +327,8 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     public void mapButtonClick(View view) {
         Intent intent = new Intent(AddNote.this, ShowUserLocationActivity.class);
+        Toast.makeText(this, recentLatLng.latitude + " "+ recentLatLng.longitude, Toast.LENGTH_LONG).show();
+        intent.putExtra("Latlng", recentLatLng);
         startActivity(intent);
     }
 

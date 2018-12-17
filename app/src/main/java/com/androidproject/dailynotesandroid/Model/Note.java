@@ -19,6 +19,11 @@ public class Note implements Serializable {
 
     }
 
+    public Note(String noteTitle, String noteContent) {
+        this.noteTitle = noteTitle;
+        this.noteContent = noteContent;
+    }
+
     public Note(String subjectName, int noteId, String noteTitle, String noteContent, String audio, Date dateTime, float latitude, float longitude, int imageId) {
         this.subjectName = subjectName;
         this.noteId = noteId;
