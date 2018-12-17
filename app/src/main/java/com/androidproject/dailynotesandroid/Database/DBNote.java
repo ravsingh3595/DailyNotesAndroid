@@ -105,6 +105,7 @@ public class DBNote {
                 while (cursor.moveToNext())
                 {
                     Note note = new Note();
+                    note.setNoteId(cursor.getInt(0));
                     note.setSubjectName(cursor.getString(1));
                     note.setNoteTitle(cursor.getString(2));
                     note.setNoteContent(cursor.getString(3));
@@ -151,7 +152,7 @@ public class DBNote {
             {
                 while (cursor.moveToNext()) {
                     Note note = new Note();
-
+                    note.setNoteId(cursor.getInt(0));
                     note.setSubjectName(cursor.getString(1));
                     note.setNoteTitle(cursor.getString(2));
                     note.setNoteContent(cursor.getString(3));
@@ -197,7 +198,7 @@ public class DBNote {
             {
                 while (cursor.moveToNext()) {
                     Note note = new Note();
-
+                    note.setNoteId(cursor.getInt(0));
                     note.setSubjectName(cursor.getString(1));
                     note.setNoteTitle(cursor.getString(2));
                     note.setNoteContent(cursor.getString(3));
