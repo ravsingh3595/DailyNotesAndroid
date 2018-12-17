@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.MediaScannerConnection;
@@ -350,18 +351,57 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         ArrayList<String> noteImgNames = new ArrayList<>();
 
         // set up the RecyclerView
-        if (mImgIds.size() > 0){
 
-            for (int i = 0; i < mImgIds.size(); i++) {
-                noteImgNames.add("");
-                LinearLayoutManager horizontalLayoutManager
-                        = new LinearLayoutManager(AddNote.this, LinearLayoutManager.HORIZONTAL, false);
-                recyclerView.setLayoutManager(horizontalLayoutManager);
-                adapter = new MyRecyclerViewAdapter(this, mImgIds, noteImgNames);
-                adapter.setClickListener(this);
-                recyclerView.setAdapter(adapter);
+        if (!isEdit){
+            if (mImgIds.size() > 0){
+
+                for (int i = 0; i < mImgIds.size(); i++) {
+                    noteImgNames.add("");
+                    LinearLayoutManager horizontalLayoutManager
+                            = new LinearLayoutManager(AddNote.this, LinearLayoutManager.HORIZONTAL, false);
+                    recyclerView.setLayoutManager(horizontalLayoutManager);
+                    adapter = new MyRecyclerViewAdapter(this, mImgIds, noteImgNames);
+                    adapter.setClickListener(this);
+                    recyclerView.setAdapter(adapter);
+                }
             }
+        }else{
+//            mImgIds.clear();
+//            for (int i = 0; i < myImagesUrl.size(); i++) {
+//                mImgIds.add(returnImageBitmap(myImagesUrl.get(i)));
+//            }
+//
+//            if (mImgIds.size() > 0){
+//
+//                for (int i = 0; i < mImgIds.size(); i++) {
+//
+//                    LinearLayoutManager horizontalLayoutManager
+//                            = new LinearLayoutManager(AddNote.this, LinearLayoutManager.HORIZONTAL, false);
+//                    recyclerView.setLayoutManager(horizontalLayoutManager);
+//                    adapter = new MyRecyclerViewAdapter(this, mImgIds, noteImgNames);
+//                    adapter.setClickListener(this);
+//                    recyclerView.setAdapter(adapter);
+//                }
+//            }
         }
+
+
+    }
+
+    public Bitmap returnImageBitmap(String imgURL){
+        File imgFile = new  File(imgURL);
+        Bitmap myBitmap = null;
+
+        if(imgFile.exists()){
+
+             myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+//            ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+
+//            myImage.setImageBitmap(myBitmap);
+
+        }
+        return  myBitmap;
 
     }
 

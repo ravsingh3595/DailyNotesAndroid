@@ -44,9 +44,6 @@ public class StoreAudioActivity extends AppCompatActivity {
         btnRecod = (Button) findViewById(R.id.btnRecord);
         btnStop = (Button) findViewById(R.id.btnStop);
 
-
-        btnStop.setEnabled(false);
-        btnPlay.setEnabled(false);
         random = new Random();
 
         Intent intent = getIntent();
@@ -54,9 +51,11 @@ public class StoreAudioActivity extends AppCompatActivity {
         isEdit = getIntent().getExtras().getBoolean("isEdit");
 
         if (isEdit){
-
-            RandomAudioFileName = audioURL;
+            btnPlay.setEnabled(true);
+            audioSavePathInDevice = audioURL;
         }else{
+            btnStop.setEnabled(false);
+            btnPlay.setEnabled(false);
 
             RandomAudioFileName = "audio_file";
         }
