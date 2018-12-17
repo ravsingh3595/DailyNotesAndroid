@@ -37,8 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + DBNote.NOTE_CONTENT + " TEXT default null,"
                 + DBNote.AUDIO + " TEXT default null,"
                 + DBNote.DATETIME + " TEXT default null,"
-                + DBNote.LATITUDE + " FLOAT default null,"
-                + DBNote.LONGITUDE + " FLOAT default null,"
+                + DBNote.LATITUDE + " DOUBLE default null,"
+                + DBNote.LONGITUDE + " DOUBLE default null,"
                 + DBNote.IMAGE_ID + " INTEGER default null)";
 
         sqLiteDatabase.execSQL(noteTable);
@@ -47,7 +47,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String imageTable = "CREATE TABLE " + DBImage.TABLE_IMAGE + "(" +
                 DBImage.IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                DBImage.IMAGE_LOCATION + " TEXT default null)";
+                DBImage.IMAGE_LOCATION + " TEXT default null," +
+                DBImage.NOTE_ID + " INTEGER default null)";
 
         sqLiteDatabase.execSQL(imageTable);
 

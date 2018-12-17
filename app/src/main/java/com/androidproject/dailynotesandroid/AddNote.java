@@ -58,8 +58,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import android.view.LayoutInflater;
 
@@ -80,8 +82,9 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     private static final float DEFAULT_ZOOM = 15f;
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    LatLng currentLatLng = null;
     LatLng recentLatLng = null;
+    double latitude;
+    double longitude;
 
     boolean isEdit = false;
     DBImage dbImage = new DBImage(AddNote.this);
@@ -102,19 +105,29 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     ArrayList<String> myImagesUrl = new ArrayList<String>(); // use array to save in database
     AudioSingleton audioSingleton = null;
 
+    String subjectName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
-//        saveNote = (Button) findViewById(R.id.saveNote);
+        saveNote = (Button) findViewById(R.id.saveNote);
         txtNoteTitle = (EditText) findViewById(R.id.txtNoteTitle);
         txtNoteContent = (EditText) findViewById(R.id.txtNoteContent);
 
         recyclerView = findViewById(R.id.rvAnimals);
 
         getLocationPermission();
+        getDeviceLocation();
 
+
+//        if (latitude == 0){
+//            Toast.makeText(getApplicationContext(), "Longitude null" + latitude, Toast.LENGTH_SHORT).show();
+//        }else {
+//            Toast.makeText(getApplicationContext(), "Longitude" + latitude, Toast.LENGTH_SHORT).show();
+//
+//        }
 //        Bundle location = getIntent().getExtras();
 //        if (location != null){
 //            Toast.makeText(AddNote.this, "Something inside", Toast.LENGTH_SHORT).show();
@@ -124,34 +137,69 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
         requestMultiplePermissions();
 
+
         Bundle noteData = getIntent().getExtras();
         if (noteData != null){
-            isEdit = true;
+//            isEdit = true;
+            subjectName = noteData.getString("subjectName");
         }
 
         /* save image */
-//        saveNote.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (isEdit){
-//
-//                    //UPDATE Database
+        saveNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (isEdit){
+
+                    //UPDATE Database
 //                    dbNote.updateNote(note);
 //                    dbImage.updateImage(image);
-//                }
-//                else{
-//                    //SAVE Database
-//                    dbNote.insertNote(populateDataNote());
+                }
+                else{
+                    //SAVE Database
+                    dbNote.insertNote(populateDataNote());
+//                    populateDataImage();
+                    Toast.makeText(AddNote.this, "Data saved", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(), NoteListActivity.class);
+                    startActivity(i);
+
 //                    dbImage.insertImage(populateDataImage());
-//                }
-//            }
-//        });
+                }
+            }
+        });
 
         mInflater = LayoutInflater.from(this);
 
         setupRecyclerView();
 
         audioSingleton = AudioSingleton.getInstance();
+    }
+
+    public Note populateDataNote(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = sdf.format(new Date()); // pass date that get from database
+
+        Toast.makeText(AddNote.this, "Time" + strDate, Toast.LENGTH_SHORT).show();
+
+        Note note = new Note();
+        note.setSubjectName(subjectName);
+        note.setNoteTitle(txtNoteTitle.getText().toString());
+        note.setNoteContent(txtNoteContent.getText().toString());
+        note.setAudio(audioSingleton.getAudioUrl());
+        note.setDateTime(strDate);
+        note.setLatitude(latitude);
+        note.setLongitude(longitude);
+//        note.setImageId();
+        return note;
+    }
+
+    public void populateDataImage(){
+        for (int j = 0;j < myImagesUrl.size(); j++ ){
+            Image image = new Image();
+            image.setImageLocation(myImagesUrl.get(j));
+//            image.setNoteId();
+            dbImage.insertImage(image);
+        }
     }
 
     private void getLocationPermission(){
@@ -164,7 +212,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
                     COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 mLocationPermissionsGranted = true;
-                currentLatLng = getDeviceLocation();
+
 
             }else{
                 ActivityCompat.requestPermissions(this,
@@ -176,7 +224,6 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
-//        return currentLatLng;
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -200,7 +247,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             }
         }
     }
-    private LatLng getDeviceLocation(){
+    private void getDeviceLocation(){
 
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
@@ -215,10 +262,10 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
                     public void onComplete(@NonNull Task task) {
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
 
-                            recentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            Location currentLocation = (Location) task.getResult();
                             Toast.makeText(getApplicationContext(), "Longitude" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
@@ -230,27 +277,15 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         }catch (SecurityException e){
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
         }
-        return recentLatLng;
     }
 
+    private void moveCamera(LatLng latLng) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
+        latitude = latLng.latitude;
+        longitude = latLng.longitude;
 
-    public Note populateDataNote(){
-        Note note = new Note();
-        note.setNoteTitle(txtNoteTitle.getText().toString());
-        note.setNoteContent(txtNoteContent.getText().toString());
-        note.setAudio(audioSingleton.getAudioUrl());
-//        note.setDateTime();
-//        note.setLatitude();
-//        note.setLongitude();
-//        note.setImageId();
-        return note;
     }
 
-    public Image populateDataImage(){
-        Image image = new Image();
-//        image.setImageLocation();
-        return image;
-    }
 
 
     private void setupRecyclerView() {

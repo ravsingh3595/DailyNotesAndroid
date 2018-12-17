@@ -10,9 +10,9 @@ public class Note implements Serializable {
     private String noteTitle;
     private String noteContent;
     private String audio;
-    private Date dateTime;              //check for data type for time stamp
-    private float latitude;
-    private float longitude;
+    private String dateTime;              //check for data type for time stamp
+    private double latitude;
+    private double longitude;
     private int imageId;
 
     public Note(){
@@ -76,28 +76,29 @@ public class Note implements Serializable {
         this.audio = audio;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(String dateTime) {
 
-        this.dateTime = new Date(); // sonia change
+        this.dateTime = dateTime;
+//        this.dateTime = new Date(); // sonia change
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

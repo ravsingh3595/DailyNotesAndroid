@@ -70,6 +70,9 @@ public class NoteListActivity extends AppCompatActivity {
 
     ArrayList<Note> savedNoteArrayList = new ArrayList<>();
     ArrayList<Image> savedImageArrayList = new ArrayList<>();
+    Bundle subjectName;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,15 +81,26 @@ public class NoteListActivity extends AppCompatActivity {
         addNote = (FloatingActionButton) findViewById(R.id.addNote);
         noteListView = (ListView) findViewById(R.id.noteListView);
         notePage = (View) findViewById(R.id.notePage);
+
         etSearch = (EditText) findViewById(R.id.etSearch);
 
 
+//        savedNoteArrayList = dbNote.getAllNote(NoteListActivity.this);
 
-        Bundle subjectName = getIntent().getExtras();
+
+
+        subjectName = getIntent().getExtras();
         if (subjectName != null){
+
 //            Toast.makeText(getApplicationContext(), "Subject " +  subjectName.get("SubjectName"), Toast.LENGTH_SHORT).show();
             setTitle(subjectName.get("SubjectName").toString());
+
+            Toast.makeText(getApplicationContext(), "Subject " +  subjectName.get("SubjectName"), Toast.LENGTH_SHORT).show();
+
+
         }
+        savedNoteArrayList = dbNote.getNoteOfSubject(NoteListActivity.this, subjectName.getString("SubjectName"));
+
 
 
         savedNoteArrayList.add(new Note("Note 1", "Sonia"));
@@ -108,6 +122,8 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentToEditNote = new Intent(getApplicationContext(), AddNote.class);
+                Bundle EditNoteBundle = new Bundle();
+                EditNoteBundle.putBoolean("isEdit", true);
 //                intentToEditNote.putExtra("NoteData", savedNoteArrayList.get(i));
 //                intentToEditNote.putExtra("ImageData", savedImageArrayList.get(i));
                 if(isServicesOK()) {
@@ -141,6 +157,7 @@ public class NoteListActivity extends AppCompatActivity {
 //                    }
                     Intent intentToNote = new Intent(getApplicationContext(), AddNote.class);
                     Bundle b = new Bundle();
+                    b.putString("subjectName", (String) subjectName.get("SubjectName"));
 ////                    b.putDouble("LatFromNote", latLng.latitude);
 ////                    b.putDouble("LngFromNote", latLng.longitude);
                     intentToNote.putExtras(b);
@@ -212,7 +229,16 @@ public class NoteListActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mDisplayedValues.size();
+
+//             return mDisplayedValues.size();
+
+            if (savedNoteArrayList != null){
+                return savedNoteArrayList.size();
+            }
+            else {
+                return notes.length;
+            }
+
         }
 
 //        @Override
@@ -242,17 +268,28 @@ public class NoteListActivity extends AppCompatActivity {
             TextView noteTextView = (TextView)view.findViewById(R.id.noteTextView);
             TextView dateTextView = (TextView)view.findViewById(R.id.dateTextView);
 
+
 //            noteTextView.setText(notes[i]);
+
+            if (savedNoteArrayList != null){
+                noteTextView.setText(savedNoteArrayList.get(i).getNoteTitle());
+                dateTextView.setText(savedNoteArrayList.get(i).getDateTime());
+
+            }else {
+                noteTextView.setText(notes[i]);
+
 //            dateTextView.setText(notesDate[i]); // comment by sonia
 
             noteTextView.setText(mDisplayedValues.get(i).getNoteTitle());
 
 
-            /* sonia changes */
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String strDate = sdf.format(new Date()); // pass date that get from database
-            dateTextView.setText(strDate);
-            /********************************/
+                /* sonia changes */
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String strDate = sdf.format(new Date()); // pass date that get from database
+                dateTextView.setText(strDate);
+                /********************************/
+            }
+
 
 
             return view;
