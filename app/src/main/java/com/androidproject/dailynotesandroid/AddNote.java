@@ -141,15 +141,14 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         }
 
         if(isEdit == true){
+            Toast.makeText(AddNote.this, "Note ID "+ noteIsEdit.getNoteId(), Toast.LENGTH_SHORT).show();
             txtNoteTitle.setText(noteIsEdit.getNoteTitle());
             txtNoteContent.setText(noteIsEdit.getNoteContent());
             audioUrl = noteIsEdit.getAudio();
             recentLatLng = new LatLng(noteIsEdit.getLatitude(), noteIsEdit.getLongitude());
-
             myImagesUrl.add(0, noteIsEdit.getImage1());
             myImagesUrl.add(1, noteIsEdit.getImage2());
             myImagesUrl.add(2, noteIsEdit.getImage3());
-
 
         }
 
@@ -182,7 +181,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         setupRecyclerView();
 
         audioSingleton = AudioSingleton.getInstance();
-        Toast.makeText(AddNote.this, "Audio" + audioSingleton.getAudioUrl(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(AddNote.this, "Audio" + audioSingleton.getAudioUrl(), Toast.LENGTH_SHORT).show();
         Toast.makeText(AddNote.this, "Name "+ subjectName, Toast.LENGTH_SHORT).show();
 
     }
@@ -193,38 +192,39 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
         if (isEdit == true){
 
-            Note note = new Note();
-            note.setSubjectName(subjectName);
-            note.setNoteTitle(txtNoteTitle.getText().toString());
-            note.setNoteContent(txtNoteContent.getText().toString());
-            note.setAudio(audioSingleton.getAudioUrl());
-            note.setDateTime(strDate);
-            note.setLatitude(latitude);
-            note.setLongitude(longitude);
+//            Note note = new Note();
+            Toast.makeText(AddNote.this, "Name "+ subjectName, Toast.LENGTH_SHORT).show();
+
+            noteIsEdit.setSubjectName(subjectName);
+            noteIsEdit.setNoteTitle(txtNoteTitle.getText().toString());
+            noteIsEdit.setNoteContent(txtNoteContent.getText().toString());
+            noteIsEdit.setAudio(audioSingleton.getAudioUrl());
+            noteIsEdit.setDateTime(strDate);
+            noteIsEdit.setLatitude(latitude);
+            noteIsEdit.setLongitude(longitude);
 //        note.setImageId();
             if (myImagesUrl.size() > 0)
             {
                 if (myImagesUrl.size() >=1)
                 {
-                    note.setImage1(myImagesUrl.get(0));
+                    noteIsEdit.setImage1(myImagesUrl.get(0));
                 }
                 if (myImagesUrl.size() >= 2)
                 {
-                    note.setImage2(myImagesUrl.get(1));
+                    noteIsEdit.setImage2(myImagesUrl.get(1));
                 }
                 if (myImagesUrl.size() >= 3)
                 {
-                    note.setImage3(myImagesUrl.get(2));
+                    noteIsEdit.setImage3(myImagesUrl.get(2));
                 }
             }
 
-            return note;
+            return noteIsEdit;
 
         }
         else {
             Note note = new Note();
             note.setSubjectName(subjectName);
-
             note.setNoteTitle(txtNoteTitle.getText().toString());
             note.setNoteContent(txtNoteContent.getText().toString());
             note.setAudio(audioSingleton.getAudioUrl());

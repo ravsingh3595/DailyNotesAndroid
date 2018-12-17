@@ -87,6 +87,13 @@ public class DBNote {
         database.delete(TABLE_NOTE, NOTE_ID + "=?", new String[]{String.valueOf(note.getNoteId())});
         database.close();
     }
+    public void deleteNoteWithSubject(Subject subjectName)
+    {
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        database.delete(TABLE_NOTE, SUBJECT_NAME + "=?", new String[]{subjectName.getSubjectName()});
+        database.close();
+    }
 
     public ArrayList<Note> getAllNote (Context context){
 
@@ -105,6 +112,50 @@ public class DBNote {
                 while (cursor.moveToNext())
                 {
                     Note note = new Note();
+                    note.setNoteId(cursor.getInt(0));
+                    note.setSubjectName(cursor.getString(1));
+                    note.setNoteTitle(cursor.getString(2));
+                    note.setNoteContent(cursor.getString(3));
+                    note.setAudio(cursor.getString(4));
+                    note.setDateTime(cursor.getString(5));
+                    note.setLatitude(cursor.getDouble(6));
+                    note.setLongitude(cursor.getDouble(7));
+                    note.setImageId(cursor.getInt(8));
+                    note.setImage1(cursor.getString(9));
+                    note.setImage2(cursor.getString(10));
+                    note.setImage3(cursor.getString(11));
+
+
+
+                    Log.d("AllNoteData", note.getNoteTitle());
+                    noteArrayList.add(note);
+                }
+            }
+        }
+        database.close();
+        return noteArrayList;
+    }
+
+    public ArrayList<Note> getNoteByDate (Context context){
+
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_NOTE;
+        String[] stringOfAruguments = {null, null, "dateTime"};
+        Cursor cursor = database.rawQuery(selectQuery, stringOfAruguments);
+
+
+        ArrayList<Note> noteArrayList = new ArrayList<>();
+        if(cursor !=null)
+        {
+            if(cursor.getCount() > 0)
+            {
+
+                while (cursor.moveToNext())
+                {
+                    Note note = new Note();
+                    note.setNoteId(cursor.getInt(0));
                     note.setSubjectName(cursor.getString(1));
                     note.setNoteTitle(cursor.getString(2));
                     note.setNoteContent(cursor.getString(3));
@@ -151,7 +202,7 @@ public class DBNote {
             {
                 while (cursor.moveToNext()) {
                     Note note = new Note();
-
+                    note.setNoteId(cursor.getInt(0));
                     note.setSubjectName(cursor.getString(1));
                     note.setNoteTitle(cursor.getString(2));
                     note.setNoteContent(cursor.getString(3));
@@ -197,7 +248,7 @@ public class DBNote {
             {
                 while (cursor.moveToNext()) {
                     Note note = new Note();
-
+                    note.setNoteId(cursor.getInt(0));
                     note.setSubjectName(cursor.getString(1));
                     note.setNoteTitle(cursor.getString(2));
                     note.setNoteContent(cursor.getString(3));
