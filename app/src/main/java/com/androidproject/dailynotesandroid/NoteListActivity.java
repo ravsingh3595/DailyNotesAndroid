@@ -222,14 +222,17 @@ public class NoteListActivity extends AppCompatActivity {
         @Override
         public int getCount() {
 
-//             return mDisplayedValues.size();
+             return mDisplayedValues.size();
 
-            if (mDisplayedValues != null){
-                return mDisplayedValues.size();
-            }
-            else {
-                return savedImageArrayList.size();
-            }
+//            if (mDisplayedValues != null){
+//                return mDisplayedValues.size();
+//            }
+//            else if(savedImageArrayList != null){
+//                return savedImageArrayList.size();
+//            }else{
+//                return notes.length;
+//            }
+
 
         }
 
@@ -263,9 +266,9 @@ public class NoteListActivity extends AppCompatActivity {
 
 //            noteTextView.setText(notes[i]);
 
-            if (savedNoteArrayList != null){
-                noteTextView.setText(savedNoteArrayList.get(i).getNoteTitle());
-                dateTextView.setText(savedNoteArrayList.get(i).getDateTime());
+            if (mDisplayedValues != null){
+                noteTextView.setText(mDisplayedValues.get(i).getNoteTitle());
+                dateTextView.setText(mDisplayedValues.get(i).getDateTime());
 
             }else {
                 noteTextView.setText(notes[i]);
@@ -273,7 +276,6 @@ public class NoteListActivity extends AppCompatActivity {
 //            dateTextView.setText(notesDate[i]); // comment by sonia
 
             noteTextView.setText(mDisplayedValues.get(i).getNoteTitle());
-
 
                 /* sonia changes */
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -347,7 +349,7 @@ public class NoteListActivity extends AppCompatActivity {
 
 
 //                            data = mOriginalValues.get(i).getNoteContent();
-                            if (data.toLowerCase().startsWith(constraint.toString()) || data1.toLowerCase().startsWith(constraint.toString())) {
+                            if (data.toLowerCase().startsWith(constraint.toString())) {
 //                                FilteredArrList.add(new Product(mOriginalValues.get(i).name,mOriginalValues.get(i).price));
                                 FilteredArrList.add(new Note(mOriginalValues.get(i).getSubjectName(), mOriginalValues.get(i).getNoteId(), mOriginalValues.get(i).getNoteTitle(), mOriginalValues.get(i).getNoteContent(), mOriginalValues.get(i).getAudio(), mOriginalValues.get(i).getDateTime(), mOriginalValues.get(i).getLatitude(), mOriginalValues.get(i).getLongitude(), mOriginalValues.get(i).getImageId()));
 
