@@ -99,6 +99,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     Note myNoteObj = new Note();
     ArrayList<String> myImagesUrl = new ArrayList<String>(); // use array to save in database
+    AudioSingleton audioSingleton = null;
 
 
     @Override
@@ -148,6 +149,8 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         mInflater = LayoutInflater.from(this);
 
         setupRecyclerView();
+
+        audioSingleton = AudioSingleton.getInstance();
     }
 
     private void getLocationPermission(){
@@ -234,7 +237,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         Note note = new Note();
         note.setNoteTitle(txtNoteTitle.getText().toString());
         note.setNoteContent(txtNoteContent.getText().toString());
-//        note.setAudio();
+        note.setAudio(audioSingleton.getAudioUrl());
 //        note.setDateTime();
 //        note.setLatitude();
 //        note.setLongitude();
@@ -286,17 +289,22 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
         if (id == R.id.menu_save) {  // save button click
             // do something here
+
+            Toast.makeText(getApplicationContext(), "Audio url: " + audioSingleton.getAudioUrl(), Toast.LENGTH_LONG).show();
+
             if (mImgIds.size() > 0){
                 Toast.makeText(this, "Array size: " + mImgIds.size(), Toast.LENGTH_SHORT).show();
                 for (int i=0; i<mImgIds.size(); i++) {
                    imageURL = saveImage(mImgIds.get(i));
                    myImagesUrl.add(imageURL);
-                    Toast.makeText(getApplicationContext(), myImagesUrl.get(i), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), myImagesUrl.get(i), Toast.LENGTH_LONG).show();
                 }
             }
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     private void appendImgData(Bitmap img){
         mImgIds.add(img);
@@ -312,6 +320,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
     public void audioButtonClick(View view) {
         Intent intent = new Intent(AddNote.this, StoreAudioActivity.class);
         startActivity(intent);
+        finish();
 
     }
 
@@ -439,12 +448,7 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
 
     @Override
     public void onItemClick(View view, int position) {
-//        Intent intent = new Intent(AddNote.this, ShowFullImageActivity.class);
-//        intent.putExtra("BitmapImage", mImgIds.get(position));
-//        startActivity(intent);
-//        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
         mImgIds.get(position).compress(Bitmap.CompressFormat.PNG, 100, bStream);
         byte[] byteArray = bStream.toByteArray();
@@ -452,7 +456,6 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
         Intent anotherIntent = new Intent(this, ShowFullImageActivity.class);
         anotherIntent.putExtra("image", byteArray);
         startActivity(anotherIntent);
-        finish();
     }
 
     /* Record Audio file */

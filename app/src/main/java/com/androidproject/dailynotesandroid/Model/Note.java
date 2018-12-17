@@ -25,7 +25,7 @@ public class Note implements Serializable {
         this.noteTitle = noteTitle;
         this.noteContent = noteContent;
         this.audio = audio;
-        this.dateTime = dateTime;
+//        this.dateTime = dateTime; // sonia change
         this.latitude = latitude;
         this.longitude = longitude;
         this.imageId = imageId;
@@ -76,7 +76,8 @@ public class Note implements Serializable {
     }
 
     public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+
+        this.dateTime = new Date(); // sonia change
     }
 
     public float getLatitude() {
