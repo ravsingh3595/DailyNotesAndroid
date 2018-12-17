@@ -39,6 +39,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the view and textview in each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+//        noteImgNames.add("");
+//        noteImgNames.add("");
+//        noteImgNames.add("");
+
         Bitmap color = mImageViews.get(position);
         String animal = noteImgNames.get(position);
 //        holder.myView.setBackgroundColor(color);

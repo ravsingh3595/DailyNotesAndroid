@@ -367,22 +367,22 @@ public class AddNote extends AppCompatActivity implements MyRecyclerViewAdapter.
             }
         }else{
 //            mImgIds.clear();
-//            for (int i = 0; i < myImagesUrl.size(); i++) {
-//                mImgIds.add(returnImageBitmap(myImagesUrl.get(i)));
-//            }
-//
-//            if (mImgIds.size() > 0){
-//
-//                for (int i = 0; i < mImgIds.size(); i++) {
-//
-//                    LinearLayoutManager horizontalLayoutManager
-//                            = new LinearLayoutManager(AddNote.this, LinearLayoutManager.HORIZONTAL, false);
-//                    recyclerView.setLayoutManager(horizontalLayoutManager);
-//                    adapter = new MyRecyclerViewAdapter(this, mImgIds, noteImgNames);
-//                    adapter.setClickListener(this);
-//                    recyclerView.setAdapter(adapter);
-//                }
-//            }
+            for (int i = 0; i < myImagesUrl.size(); i++) {
+                mImgIds.add(returnImageBitmap(myImagesUrl.get(i)));
+            }
+
+            if (mImgIds.size() > 0){
+
+                for (int i = 0; i < mImgIds.size(); i++) {
+                    noteImgNames.add("");
+                    LinearLayoutManager horizontalLayoutManager
+                            = new LinearLayoutManager(AddNote.this, LinearLayoutManager.HORIZONTAL, false);
+                    recyclerView.setLayoutManager(horizontalLayoutManager);
+                    adapter = new MyRecyclerViewAdapter(this, mImgIds, noteImgNames);
+                    adapter.setClickListener(this);
+                    recyclerView.setAdapter(adapter);
+                }
+            }
         }
 
 
